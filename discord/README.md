@@ -6,6 +6,7 @@ This directory contains the scripts necessary to interface with the Discord API.
 
 This file currently only contains the API token for the discord bot.
 A token can be acquired by creating an application at: https://discordapp.com/developers/applications/
+
 *Note: The Discord Bot must be a member of the server and have permissions in the channels it's used in*
 
 ### discord_async.py
