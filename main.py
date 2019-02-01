@@ -17,7 +17,7 @@ def websiteFilter(website):
 
 	if(website == "https://us.bape.com/"):
 		bapeScrape(website)
-	elif(website == "https://www.nike.com/us/en_us/"):
+	elif(website == "https://store.nike.com/us/en_us/pw/mens-shoes/7puZoi3"):
 		nikeScrape(website)
 	elif(website == "https://www.adidas.com/us"):
 		adidasScrape(website)
