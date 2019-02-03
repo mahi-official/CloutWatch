@@ -5,6 +5,9 @@ import time
 import random
 import os
 
+import threading
+import queue
+
 def requestWebsite(website):
 
 	print("Scraping: {}".format(website))
@@ -36,15 +39,8 @@ def bapeScrape(website):
 	return  soup
 
 def nikeScrape(website):
-
-	def getShoeInfo(driver, url):
-		print(url)
-		pageContent = driver.get(url)
-		return driver.page_source
 	
-	
-	
-	if True: 
+	if False: 
 		soup = BeautifulSoup(requestWebsite(website), 'html.parser')
 	else:
 		f = open("Docs/nike.html", "r")
@@ -58,53 +54,78 @@ def nikeScrape(website):
 		f.close()
 		exit()
 
-	nikeresult = []
 
-	driver = webdriver.Chrome()
+	nikeresult = []
+	q = queue.Queue()
+
+	def getShoeInfo(div, shoe):
+
+		driver = webdriver.Chrome()
+		pageContent = driver.get(div.find('a')['href'])
+		shoeInfo = BeautifulSoup(driver.page_source, 'html.parser')
+		availableSizes, unavailableSizes = [], []
+		for size in shoeInfo.find_all("input", {"name": "skuAndSize"}):
+			if('disabled' in str(size)):
+				tempSizeArray = str(size).split('"')
+				unavailableSizes.append(tempSizeArray[1])
+			else:
+				tempSizeArray = str(size).split('"')
+				availableSizes.append(tempSizeArray[1])
+		shoe.append(unavailableSizes)
+		shoe.append(availableSizes)
+		nikeresult.append(shoe)
+		driver.close()
+
+	
 	print(len(soup.find_all("div", {"class": "grid-item-box"})))
 	for item in soup.find_all("div", {"class": "grid-item-box"}):
 		shoe = []
 		for productname in item.find_all("p", {"class": "product-display-name nsg-font-family--base edf-font-size--regular nsg-text--dark-grey"}):
-			shoe.append(productname.string)
-			print("Name: ",productname.string)
+			shoe.append(productname.get_text())
 		for price in item.find_all("span", {"class": "local nsg-font-family--base"}):
-			shoe.append(price.string)
-			print("Price: ",price.string)
-		for div in item.find_all("div", {"class": "grid-item-image-wrapper sprite-sheet sprite-index-0"}):
+			shoe.append(price.get_text())
+
+
+	
+		for div in item.find_all("div", {"class": "grid-item-image-wrapper sprite-sheet sprite-index-0"}):			
 			shoe.append(div.find('a')['href'])
-			print("Link :",div.find('a')['href'])
-			shoeInfo = BeautifulSoup(getShoeInfo(driver, div.find('a')['href']))
-			availableSizes, unavailableSizes = [], []
-			for size in shoeInfo.find_all("input", {"name": "skuAndSize"}):
-				if('disabled' in str(size)):
-					tempSizeArray = str(size).split('"')
-					unavailableSizes.append(tempSizeArray[1])
-				else:
-					tempSizeArray = str(size).split('"')
-					availableSizes.append(tempSizeArray[1])
-			print("Y sizes: ",availableSizes)
-			print("X sizes: ",unavailableSizes)
-			shoe.append(availableSizes)
-			shoe.append(unavailableSizes)
 
-			print("\n")
-		nikeresult.append(shoe)
+			#print(shoe)
+			obj = [div, shoe]
+			q.put(obj)
+			print("Qsize: ", q.qsize())
 
+	threads = []
+	while not q.empty():
+		if(threading.active_count() <=3):
+			print("Qsize: ", q.qsize())
+			obj = q.get()
+			div, shoe = obj[0], obj[1]
+			t = threading.Thread(target=getShoeInfo, args=(div, shoe,))
+			threads.append(t)
+			t.start()
+			try:
+				print(len(nikeresult))
+				print(nikeresult[random.randrange(0,len(nikeresult))])
+			except:
+				pass
+		
 
 
 	for shoe in nikeresult:
 		print("name: {} price: {} \nlink: {} \navailableSizes: {} \nunavailableSizes: {}". format(shoe[0], shoe[1], shoe[2], shoe[3], shoe[4]))
 
 
-	driver.close()
+	
 	print(len(nikeresult))
 	print(nikeresult[random.randrange(0,len(nikeresult))])
 	exit()
 
-	return  soup
+	return  nikeresult
 
 def adidasScrape(website):
 	soup = requestWebsite(website)
+
 
 	return  soup
 
