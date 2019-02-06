@@ -71,6 +71,7 @@ def Scrape(content):
 			obj = qX.get() 
 			div, shoe = obj[0], obj[1]
 			time.sleep(3) 
+
 			pageContent = driver.get(div.find('a')['href'])
 			shoeInfo = BeautifulSoup(driver.page_source, 'html.parser')
 			availableSizes, unavailableSizes = [], []
@@ -81,8 +82,9 @@ def Scrape(content):
 				else:
 					tempSizeArray = str(size).split('"')
 					availableSizes.append(tempSizeArray[1])
-			shoe['available'] = availableSizes
-			shoe['unavailable'] = unavailableSizes
+
+			shoe['available'] = str(availableSizes)
+			shoe['unavailable'] = str(unavailableSizes)
 			print("Thread: " ,threading.current_thread(), " CurrentQueue: ", qX.qsize())
 			#print(shoe[0:2],shoe[-2:])
 			DBCheck.check("Nike", shoe, connector)

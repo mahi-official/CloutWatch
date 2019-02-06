@@ -1,21 +1,23 @@
-import pymysql
+def check(brand, item, connector):
 
-DB_URL = "localhost"
-DB_USER = "cloutwatch"
-DB_PASS = "psswd"
-database_name = "nike"
+	with connector.cursor() as cursor:
 
-connection = pymysql.connect(host=DB_URL,
-							 user=DB_USER,
-							 password=DB_PASS,
-							 database=database_name,
-							 charset='utf8mb4',
-							 cursorclass=pymysql.cursors.DictCursor)
+		#check in db if item exists
+		#if it does -> do nothign
+		#if it doesnt -> replace the item
 
-
-def check(brand, item):
-	#check in db if item exists
-	#if it does -> do nothign
-	#if it doesnt -> replace the item
-	
-	
+		try:
+			cursor.execute("SELECT * FROM data WHERE name = '{}'".format(item['name']))
+			rows = cursor.fetchall()
+			if(len(rows) == 0):
+				cursor.execute("""INSERT INTO data (name, price, link, available, unavailable) VALUES ("{}", "{}","{}", "{}", "{}")""".format(item['name'],
+																																		  item['price'], 
+																																		  item['link'], 
+																																		  item['available'], 
+																																		  item['unavailable']))
+				connector.commit()
+				print("{} put in {} DB".format(item['name'], brand))
+			else:
+				print(rows)
+		except Exception as e:
+			print(e)
