@@ -7,11 +7,12 @@ import os
 import threading
 import queue
 
+import database.DBCheck as DBCheck
+import database.DBConnector as DBConnector
 
 def Scrape(content):
-	 
 
-	#Choose weither you wanna download the file or use a pre existing version
+	#Choose in parent file weither you wanna download the file or use a pre existing version
 	if(content != "None"): 
 		soup = BeautifulSoup(content, 'html.parser')
 	else:
@@ -35,15 +36,21 @@ def Scrape(content):
 
 
 	for item in soup.find_all("div", {"class": "grid-item-box"}): #for every shoe on the front page:
-		shoe = []
+		shoe = {'name': "shoeName",
+				'price': "$000",
+				'link': "https://nike.com/shoe",
+				'available': [1,2,3],
+				'unavailable': [-1,-2,-3]}
+
+		#shoe structure = {"name of shoe", "price of shoe in $", "https://linkToShoe.com", ["available sizes", "14","15"],["unavailable sizes", "12", "13"]}
 		for productname in item.find_all("p", {"class": "product-display-name nsg-font-family--base edf-font-size--regular nsg-text--dark-grey"}):
-			shoe.append(productname.get_text().strip()) #get the name of she shoe ie: Air Jordan 12, Kyrie 5 
+			shoe['name'] = productname.get_text().strip() #get the name of she shoe ie: Air Jordan 12, Kyrie 5 
 		for price in item.find_all("span", {"class": "local nsg-font-family--base"}):
-			shoe.append(price.get_text().strip()) #get the price for the individual shoe ie: $150, $100
+			shoe['price'] = price.get_text().strip() #get the price for the individual shoe ie: $150, $100
 
 
 		for div in item.find_all("div", {"class": "grid-item-image-wrapper sprite-sheet sprite-index-0"}):			
-			shoe.append(div.find('a')['href']) #get the link for every individual shoe
+			shoe['link'] = div.find('a')['href'] #get the link for every individual shoe
 
 			#print(shoe)
 			obj = [div, shoe] #add the shoe[name, price, link] and the div element (containing the html5 for the item)
@@ -54,7 +61,7 @@ def Scrape(content):
 	print("Final Qsize: ", q.qsize())
 	
 
-	def getShoeInfo(queueObj):
+	def getShoeInfo(queueObj, connector):
 
 		qX = queueObj
 		driver = webdriver.Chrome()
@@ -63,7 +70,7 @@ def Scrape(content):
 
 			obj = qX.get() 
 			div, shoe = obj[0], obj[1]
-			time.sleep(4) 
+			time.sleep(3) 
 			pageContent = driver.get(div.find('a')['href'])
 			shoeInfo = BeautifulSoup(driver.page_source, 'html.parser')
 			availableSizes, unavailableSizes = [], []
@@ -74,11 +81,11 @@ def Scrape(content):
 				else:
 					tempSizeArray = str(size).split('"')
 					availableSizes.append(tempSizeArray[1])
-			shoe.append(unavailableSizes)
-			shoe.append(availableSizes)
+			shoe['available'] = availableSizes
+			shoe['unavailable'] = unavailableSizes
 			print("Thread: " ,threading.current_thread(), " CurrentQueue: ", qX.qsize())
-			print(shoe[0:2],shoe[-2:])
-			nikeresult.append(shoe)
+			#print(shoe[0:2],shoe[-2:])
+			DBCheck.check("Nike", shoe, connector)
 		driver.close()
 
 	while not q.empty(): #splitting up the queues in multiple secondary queues that are given to each individual thread
@@ -96,21 +103,13 @@ def Scrape(content):
 
 	while not q.empty():
 		if(threading.active_count() <=2): #change this if more threads required
-			t = threading.Thread(target=getShoeInfo, args=(q.get(),))
+			t = threading.Thread(target=getShoeInfo, args=(q.get(),DBConnector.connect("nike"),))
 			threads.append(t)
 			t.start()
 			print("Thread {} launched!".format(threading.current_thread()))
-			time.sleep(4)
+			time.sleep(2)
 
 	while not q1.empty() and not q2.empty(): #sleep till secondary queue's are done
 		time.sleep(1)
 
-	print(len(nikeresult))
-	for shoe in nikeresult:
-		print("name: {} price: {} \nlink: {} \navailableSizes: {} \nunavailableSizes: {}". format(shoe[0], shoe[1], shoe[2], shoe[3], shoe[4]))
-	
-	
-	print(nikeresult[random.randrange(0,len(nikeresult))])
 	exit()
-
-	return  nikeresult

@@ -9,7 +9,6 @@ import os
 import threading
 import queue
 
-
 import SNike
 
 def requestWebsite(website):

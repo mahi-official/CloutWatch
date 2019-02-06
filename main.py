@@ -36,7 +36,6 @@ def websiteFilter(website):
 
 def main():
 	for website in getWebsites():
-		#print(website)	
 		websiteFilter(website)
 
 if __name__ == '__main__':
