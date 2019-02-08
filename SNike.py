@@ -72,6 +72,8 @@ def Scrape(content):
 			div, shoe = obj[0], obj[1]
 			time.sleep(3) 
 
+			print("Thread: " ,threading.current_thread(), " CurrentQueue: ", qX.qsize())
+
 			pageContent = driver.get(div.find('a')['href'])
 			shoeInfo = BeautifulSoup(driver.page_source, 'html.parser')
 			availableSizes, unavailableSizes = [], []
@@ -85,9 +87,10 @@ def Scrape(content):
 
 			shoe['available'] = str(availableSizes)
 			shoe['unavailable'] = str(unavailableSizes)
-			print("Thread: " ,threading.current_thread(), " CurrentQueue: ", qX.qsize())
-			#print(shoe[0:2],shoe[-2:])
-			DBCheck.check("Nike", shoe, connector)
+			if(len(availableSizes)==0 and len(unavailableSizes) == 0):
+				DBCheck.emptyItem("Nike", shoe, connector)
+			else:	
+				DBCheck.check("Nike", shoe, connector)
 		driver.close()
 
 	while not q.empty(): #splitting up the queues in multiple secondary queues that are given to each individual thread
