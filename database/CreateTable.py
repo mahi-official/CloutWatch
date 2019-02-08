@@ -42,4 +42,24 @@ def createEmptyItem():
 		except Exception as e:
 			print(e)
 
-createEmptyItem()
+def createNotification():
+	DB_URL = "localhost"
+	DB_USER = "cloutwatch"
+	DB_PASS = "psswd"
+	database_name = "nike"
+
+	connection = pymysql.connect(host=DB_URL,
+							 user=DB_USER,
+							 password=DB_PASS,
+							 database=database_name,
+							 charset='utf8mb4',
+							 cursorclass=pymysql.cursors.DictCursor)
+
+	with connection.cursor() as cursor:
+		try:
+			cursor.execute("CREATE TABLE IF NOT EXISTS notification (type TEXT, unixTime TEXT, item TEXT)")
+			connection.commit()
+		except Exception as e:
+			print(e)
+
+createNotification()

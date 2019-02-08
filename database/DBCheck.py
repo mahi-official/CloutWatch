@@ -1,3 +1,5 @@
+import time
+
 def check(brand, item, connector):
 
 	with connector.cursor() as cursor:
@@ -10,6 +12,10 @@ def check(brand, item, connector):
 																																		  CurrentItem['unavailable']))
 			connector.commit()
 
+		def notification(Ntype, item):
+			cursor.execute("""INSERT INTO notification (type, item, unixTime) VALUES ("{}", "{}","{}")""".format(str(Ntype),str(item),str(time.time())))
+			connector.commit()
+
 		#check in db if item exists
 		#if it does -> do nothign
 		#if it doesnt -> replace the item
@@ -19,6 +25,7 @@ def check(brand, item, connector):
 			rows = cursor.fetchall()
 			if(len(rows) == 0):
 				insert(item)
+				notification("new", item)
 				print("{} put in {} DB".format(item['name'], brand))
 			else:
 				print("{} allready exist in database!".format(item['name']))
@@ -29,23 +36,19 @@ def check(brand, item, connector):
 						  'available': '[1,2,3]'}
 
 				if(item['price'] != shoe['price']):
-					#alert DB about pricechange
+					notification("price", item)
 					change['price'] = shoe['price']
 				else:
 					change['price'] = item['price']
 
-				if(item['link'] != shoe['link']):
-					#alert DB about linkchange
-					change['link'] = shoe['link']
-				else:
-					change['link'] = item['link']
-
 				if(item['available'] != item['available']):
-					#alert DB about new sizes in stock
+					notification("available", item)
 					change['available'] = shoe['available']
 				else:
 					change['available'] = item['available']
 					
+
+				### CHANGE THIS TO EDIT OR SOMETHING
 				insert(shoe)
 
 
