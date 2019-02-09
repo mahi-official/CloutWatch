@@ -57,7 +57,7 @@ def createNotification():
 
 	with connection.cursor() as cursor:
 		try:
-			cursor.execute("CREATE TABLE IF NOT EXISTS notification (type TEXT, unixTime TEXT, item TEXT)")
+			cursor.execute("CREATE TABLE IF NOT EXISTS notification (type TEXT, unixTime TEXT, name TEXT, price TEXT, link TEXT, available TEXT, unavailable TEXT)")
 			connection.commit()
 		except Exception as e:
 			print(e)
