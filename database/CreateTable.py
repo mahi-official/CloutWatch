@@ -16,7 +16,7 @@ def createNikeTable():
 
 	with connection.cursor() as cursor:
 		try:
-			cursor.execute("CREATE TABLE IF NOT EXISTS data (name TEXT, price TEXT, link TEXT, available TEXT, unavailable TEXT)")
+			cursor.execute("CREATE TABLE IF NOT EXISTS data (ID int NOT NULL AUTO_INCREMENT, name TEXT, price TEXT, link TEXT, available TEXT, unavailable TEXT, PRIMARY KEY (ID))")
 			connection.commit()
 		except Exception as e:
 			print(e)
@@ -37,7 +37,7 @@ def createEmptyItem():
 
 	with connection.cursor() as cursor:
 		try:
-			cursor.execute("CREATE TABLE IF NOT EXISTS emptyItem (name TEXT, price TEXT, link TEXT, available TEXT, unavailable TEXT)")
+			cursor.execute("CREATE TABLE IF NOT EXISTS emptyItem (ID int NOT NULL AUTO_INCREMENT, name TEXT, price TEXT, link TEXT, available TEXT, unavailable TEXT, PRIMARY KEY (ID))")
 			connection.commit()
 		except Exception as e:
 			print(e)
@@ -57,9 +57,11 @@ def createNotification():
 
 	with connection.cursor() as cursor:
 		try:
-			cursor.execute("CREATE TABLE IF NOT EXISTS notification (type TEXT, unixTime TEXT, name TEXT, price TEXT, link TEXT, available TEXT, unavailable TEXT)")
+			cursor.execute("CREATE TABLE IF NOT EXISTS notification (ID int NOT NULL AUTO_INCREMENT, type TEXT, unixTime TEXT, name TEXT, price TEXT, link TEXT, available TEXT, unavailable TEXT, PRIMARY KEY (ID))")
 			connection.commit()
 		except Exception as e:
 			print(e)
 
 createNotification()
+createEmptyItem()
+createNikeTable()
