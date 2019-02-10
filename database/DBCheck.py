@@ -5,34 +5,31 @@ def check(brand, item, connector):
 
 	with connector.cursor() as cursor:
 
-		try:
-			def insert(CurrentItem):
-				cursor.execute("""INSERT INTO data (name, price, link, available, unavailable) VALUES ("{}", "{}","{}", "{}", "{}")""".format(CurrentItem['name'],
-																																			  CurrentItem['price'], 
-																																			  CurrentItem['link'], 
-																																			  str(CurrentItem['available']), 
-																																			  str(CurrentItem['unavailable'])))
-				connector.commit()
+		
+		def insert(CurrentItem):
+			cursor.execute("""INSERT INTO data (name, price, link, available, unavailable) VALUES ("{}", "{}","{}", "{}", "{}")""".format(CurrentItem['name'],
+																																		  CurrentItem['price'], 
+																																		  CurrentItem['link'], 
+																																		  str(CurrentItem['available']), 
+																																		  str(CurrentItem['unavailable'])))
+			connector.commit()
 
-			def notification(Ntype, CurrentItem):
-				cursor.execute("""INSERT INTO notification (type, unixTime, name, price, link, available, unavailable) VALUES ("{}", "{}","{}", "{}","{}", "{}", "{}")""".format(str(Ntype),str(time.time()),
-																																	CurrentItem['name'],
-																																	CurrentItem['price'], 
-																																	CurrentItem['link'], 
-																																	str(CurrentItem['available']), 
-																																	str(CurrentItem['unavailable'])))
-				connector.commit()
+		def notification(Ntype, CurrentItem):
+			cursor.execute("""INSERT INTO notification (type, unixTime, name, price, link, available, unavailable) VALUES ("{}", "{}","{}", "{}","{}", "{}", "{}")""".format(str(Ntype),round(time.time()),
+																																CurrentItem['name'],
+																																CurrentItem['price'], 
+																																CurrentItem['link'], 
+																																str(CurrentItem['available']), 
+																																str(CurrentItem['unavailable'])))
+			connector.commit()
 
-			def update(ChangedItem):
-				cursor.execute("""UPDATE data SET name = "{}", price = "{}", link = "{}", available = "{}", unavailable = "{}") VALUES ("{}", "{}","{}")""".format(ChangedItem['name'],
-																																								  ChangedItem['price'], 
-																																								  ChangedItem['link'], 
-																																								  str(ChangedItem['available']), 
-																																								  str(ChangedItem['unavailable'])))
-				connector.commit()
-		except Exception as e:
-			print(e)
-			errorLog.log(e)
+		def update(ChangedItem):
+			cursor.execute("""UPDATE data SET name = "{}", price = "{}", link = "{}", available = "{}", unavailable = "{}") VALUES ("{}", "{}","{}", "{}","{}")""".format(ChangedItem['name'],
+																																							 			  ChangedItem['price'], 
+																																							 			  ChangedItem['link'], 
+																																							  			  str(ChangedItem['available']), 
+																																							  		      str(ChangedItem['unavailable'])))
+			connector.commit()
 
 		#check in db if item exists
 		#if it does -> do nothign
@@ -48,31 +45,35 @@ def check(brand, item, connector):
 			else:
 				print("{} allready exist in database!".format(item['name']))
 
+				changeStr = ""
 				shoe = rows[0]
 				if(shoe != item):
 					change = {'name': "shoeName",
-					'price': "$000",
-					'link': "https://nike.com/shoe",
-					'available': [1,2,3],
-					'unavailable': [-1,-2,-3]}
+							'price': "$000",
+							'link': "https://nike.com/shoe",
+							'available': [1,2,3],
+							'unavailable': [-1,-2,-3]}
+
 
 					if(item['price'] != shoe['price']):
+						changeStr += "||price|| "
 						notification("price", item)
 						change['price'] = shoe['price']
 					else:
 						change['price'] = item['price']
 
 					if(item['available'] != item['available']):
+						changeStr += "||available|| "
 						notification("available", item)
 						change['available'] = shoe['available']
 					else:
 						change['available'] = item['available']
-						
+
 					change['name'] = item['name']
 					change['link'] = item['link']
 					change['unavailable'] = item['unavailable']	
 
-					print("Updated {}".format(change['name']))
+					print("Updated {}: {}".format(change['name'], changeStr))
 					update(change)
 
 
