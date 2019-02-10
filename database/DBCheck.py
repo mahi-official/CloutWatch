@@ -10,25 +10,26 @@ def check(brand, item, connector):
 			cursor.execute("""INSERT INTO data (name, price, link, available, unavailable) VALUES ("{}", "{}","{}", "{}", "{}")""".format(CurrentItem['name'],
 																																		  CurrentItem['price'], 
 																																		  CurrentItem['link'], 
-																																		  str(CurrentItem['available']), 
-																																		  str(CurrentItem['unavailable'])))
+																																		  CurrentItem['available'], 
+																																		  CurrentItem['unavailable']))
 			connector.commit()
 
 		def notification(Ntype, CurrentItem):
-			cursor.execute("""INSERT INTO notification (type, unixTime, name, price, link, available, unavailable) VALUES ("{}", "{}","{}", "{}","{}", "{}", "{}")""".format(str(Ntype),round(time.time()),
+			cursor.execute("""INSERT INTO notification (type, unixTime, name, price, link, available, unavailable) VALUES ("{}", "{}","{}", "{}","{}", "{}", "{}")""".format(str(Ntype),
+																																round(time.time()),
 																																CurrentItem['name'],
 																																CurrentItem['price'], 
 																																CurrentItem['link'], 
-																																str(CurrentItem['available']), 
-																																str(CurrentItem['unavailable'])))
+																																CurrentItem['available'], 
+																																CurrentItem['unavailable']))
 			connector.commit()
 
-		def update(ChangedItem):
-			cursor.execute("""UPDATE data SET name = "{}", price = "{}", link = "{}", available = "{}", unavailable = "{}") VALUES ("{}", "{}","{}", "{}","{}")""".format(ChangedItem['name'],
-																																							 			  ChangedItem['price'], 
-																																							 			  ChangedItem['link'], 
-																																							  			  str(ChangedItem['available']), 
-																																							  		      str(ChangedItem['unavailable'])))
+		def update(CurrentItem):
+			cursor.execute("""UPDATE data SET price = "{}", link = "{}", available = "{}", unavailable = "{}" WHERE name = "{}" """.format(CurrentItem['price'], 
+																																		  CurrentItem['link'], 
+																																		  CurrentItem['available'], 
+																																		  CurrentItem['unavailable'],
+																																		  CurrentItem['name']))
 			connector.commit()
 
 		#check in db if item exists
@@ -73,7 +74,11 @@ def check(brand, item, connector):
 					change['link'] = item['link']
 					change['unavailable'] = item['unavailable']	
 
-					print("Updated {}: {}".format(change['name'], changeStr))
+					if(changeStr == ""):
+						print("Nothing Changed {}".format(change['name']))
+					else:
+						print("Updated {}: {}".format(change['name'], changeStr))
+						
 					update(change)
 
 
