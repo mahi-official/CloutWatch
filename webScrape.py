@@ -22,7 +22,7 @@ def requestWebsite(website):
 		last_height = driver.execute_script("return document.body.scrollHeight")
 		while True:
 			driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-			time.sleep(1)
+			time.sleep(1.5)
 			new_height = driver.execute_script("return document.body.scrollHeight")
 			if(new_height == last_height):
 				break
@@ -43,7 +43,7 @@ def bapeScrape(website):
 
 def nikeScrape(website):
 
-	if True:
+	if False:
 		content = requestWebsite(website)
 	else:
 		content = "None"

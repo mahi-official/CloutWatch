@@ -13,6 +13,8 @@ import database.DBConnector as DBConnector
 import errorLog
 import sanetizeInput
 
+global sleeptime
+
 def Scrape(content):
 
 	try:
@@ -42,6 +44,9 @@ def Scrape(content):
 
 	print("Total amount of shoes found on page: ", len(soup.find_all("div", {"class": "grid-item-box"})))
 
+	iDCount = 0
+	normalCount = 0
+	
 	try:
 		for item in soup.find_all("div", {"class": "grid-item-box"}): #for every shoe on the front page:
 			shoe = {'name': "shoeName",
@@ -60,19 +65,23 @@ def Scrape(content):
 			for div in item.find_all("div", {"class": "grid-item-image-wrapper sprite-sheet sprite-index-0"}):			
 				shoe['link'] = div.find('a')['href'] #get the link for every individual shoe
 
+			
 			if(" iD" in shoe['name']):
-				print("Skipped Nike iD: {}".format(shoe['name']))
+				iDCount += 1
+				#print("Skipped Nike iD: {}".format(shoe['name']))
 			else:
 				obj = [div, shoe] #add the shoe[name, price, link] and the div element (containing the html5 for the item)
-				q.put(obj) #put that object into the master queue
-				if(q.qsize() % 100 == 0): #if queuesize is divisible by 10 show qsize (to clear clutter)
-					print("Qsize: ", q.qsize())
+				nikeresult.append(obj) #put that object into the master queue
+				if(len(nikeresult) % 100 == 0): #if queuesize is divisible by 10 show qsize (to clear clutter)
+					print("Qsize: ", len(nikeresult))
+				normalCount += 1
 
+		print("Added {} items to queue, skipped {} iD shoes".format(normalCount, iDCount))
 	except Exception as e:
 		print(e)
 		errorLog.log(e)
 
-	print("Final Qsize: ", q.qsize())
+	print("Final Qsize: ", len(nikeresult))
 	
 
 	def getShoeInfo(queueObj, connector):
@@ -85,13 +94,21 @@ def Scrape(content):
 
 				obj = qX.get() 
 				div, shoe = obj[0], obj[1]
-				time.sleep(3) 
+				
 
 				print("Thread: " ,threading.current_thread(), " CurrentQueue: ", qX.qsize())
 
 				pageContent = driver.get(div.find('a')['href'])
 				shoeInfo = BeautifulSoup(driver.page_source, 'html.parser')
 				availableSizes, unavailableSizes = [], []
+
+				for forbidden in soup.find_all("pre"):
+					print(forbidden)
+					if('"Forbidden access"' in forbidden.get_text()):
+						print("Forbidden access found!")
+						time.sleep(60)
+						qX.put(queueObj)
+
 				for size in shoeInfo.find_all("input", {"name": "skuAndSize"}):
 					if('disabled' in str(size)):
 						tempSizeArray = str(size).split('"')
@@ -110,6 +127,7 @@ def Scrape(content):
 						DBCheck.emptyItem("Nike", shoe, connector)
 				else:	
 					DBCheck.check("Nike", shoe, connector)
+				time.sleep(2) 
 			driver.close()
 		except Exception as e:
 			print(e)
@@ -117,8 +135,9 @@ def Scrape(content):
 
 	try:
 
-		while not q.empty(): #splitting up the queues in multiple secondary queues that are given to each individual thread
-			queueObj[count-1].put(q.get())
+		random.shuffle(nikeresult)
+		while len(nikeresult) != 0: #splitting up the queues in multiple secondary queues that are given to each individual thread
+			queueObj[count-1].put(nikeresult.pop(0))
 			if(count == 2):
 				count = 1
 			else:
