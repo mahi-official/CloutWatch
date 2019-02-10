@@ -60,7 +60,9 @@ def Scrape(content):
 			for div in item.find_all("div", {"class": "grid-item-image-wrapper sprite-sheet sprite-index-0"}):			
 				shoe['link'] = div.find('a')['href'] #get the link for every individual shoe
 
-				#print(shoe)
+			if(" iD" in shoe['name']):
+				print("Skipped Nike iD: {}".format(shoe['name']))
+			else:
 				obj = [div, shoe] #add the shoe[name, price, link] and the div element (containing the html5 for the item)
 				q.put(obj) #put that object into the master queue
 				if(q.qsize() % 100 == 0): #if queuesize is divisible by 10 show qsize (to clear clutter)
