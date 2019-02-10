@@ -11,6 +11,7 @@ import database.DBCheck as DBCheck
 import database.DBConnector as DBConnector
 
 import errorLog
+import sanetizeInput
 
 def Scrape(content):
 
@@ -51,7 +52,7 @@ def Scrape(content):
 
 			#shoe structure = {"name of shoe", "price of shoe in $", "https://linkToShoe.com", ["available sizes", "14","15"],["unavailable sizes", "12", "13"]}
 			for productname in item.find_all("p", {"class": "product-display-name nsg-font-family--base edf-font-size--regular nsg-text--dark-grey"}):
-				shoe['name'] = productname.get_text().strip() #get the name of she shoe ie: Air Jordan 12, Kyrie 5 
+				shoe['name'] = sanetizeInput.clean(productname.get_text().strip()) #get the name of she shoe ie: Air Jordan 12, Kyrie 5 
 			for price in item.find_all("span", {"class": "local nsg-font-family--base"}):
 				shoe['price'] = price.get_text().strip() #get the price for the individual shoe ie: $150, $100
 
