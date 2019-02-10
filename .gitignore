@@ -1,6 +1,3 @@
 
 debug.log
-__pycache__/SNike.cpython-36.pyc
-__pycache__/webScrape.cpython-36.pyc
-database/__pycache__/DBCheck.cpython-36.pyc
-database/__pycache__/DBConnector.cpython-36.pyc
+*.pyc
