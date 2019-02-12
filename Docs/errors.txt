@@ -23,3 +23,58 @@ HTTPConnectionPool(host='127.0.0.1', port=20363): Max retries exceeded with url:
 ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
 Message: Service chromedriver unexpectedly exited. Status code was: 3221225786
 
+Message: invalid argument: cannot parse capability: proxy
+from invalid argument: Specifying 'socksProxy' requires an integer for 'socksVersion'
+  (Driver info: chromedriver=2.46.628402 (536cd7adbad73a3783fdc2cab92ab2ba7ec361e1),platform=Windows NT 10.0.17134 x86_64)
+
+Message: invalid argument: cannot parse capability: proxy
+from invalid argument: Specifying 'socksProxy' requires an integer for 'socksVersion'
+  (Driver info: chromedriver=2.46.628402 (536cd7adbad73a3783fdc2cab92ab2ba7ec361e1),platform=Windows NT 10.0.17134 x86_64)
+
+Message: invalid argument: cannot parse capability: proxy
+from invalid argument: Specifying 'socksProxy' requires an integer for 'socksVersion'
+  (Driver info: chromedriver=2.46.628402 (536cd7adbad73a3783fdc2cab92ab2ba7ec361e1),platform=Windows NT 10.0.17134 x86_64)
+
+Message: invalid argument: cannot parse capability: proxy
+from invalid argument: Specifying 'socksProxy' requires an integer for 'socksVersion'
+  (Driver info: chromedriver=2.46.628402 (536cd7adbad73a3783fdc2cab92ab2ba7ec361e1),platform=Windows NT 10.0.17134 x86_64)
+
+('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+Message: Service chromedriver unexpectedly exited. Status code was: 3221225786
+
+('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+Message: Service chromedriver unexpectedly exited. Status code was: 3221225786
+
+('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+Message: Service chromedriver unexpectedly exited. Status code was: 3221225786
+
+Message: Service chromedriver unexpectedly exited. Status code was: 3221225786
+
+Message: Service chromedriver unexpectedly exited. Status code was: 3221225786
+
+('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+name 'getProx' is not defined
+HTTPConnectionPool(host='127.0.0.1', port=26261): Max retries exceeded with url: /session/f575f88247d68a54a9f55e5f8a84bc0d/window (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000254CE959F98>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it',))
+('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+list index out of range
+list index out of range
+list index out of range
+list index out of range
+('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=72.0.3626.96)
+  (Driver info: chromedriver=2.46.628402 (536cd7adbad73a3783fdc2cab92ab2ba7ec361e1),platform=Windows NT 10.0.17134 x86_64)
+
+('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))

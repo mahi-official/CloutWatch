@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.proxy import Proxy, ProxyType
 from bs4 import BeautifulSoup
 import time
 import random
@@ -12,6 +13,7 @@ import database.DBConnector as DBConnector
 
 import errorLog
 import sanetizeInput
+import seleniumProxy
 
 global sleeptime
 
@@ -85,50 +87,50 @@ def Scrape(content):
 	
 
 	def getShoeInfo(queueObj, connector):
-
 		try:
 			qX = queueObj
-			driver = webdriver.Chrome()
-
+			
 			while not qX.empty():
 
-				obj = qX.get() 
-				div, shoe = obj[0], obj[1]
-				
+				driver = seleniumProxy.getDriver()
 
-				print("Thread: " ,threading.current_thread(), " CurrentQueue: ", qX.qsize())
+				for i in range(20):
+					obj = qX.get() 
+					div, shoe = obj[0], obj[1]
+					print("Thread: " ,threading.current_thread(), " CurrentQueue: ", qX.qsize())
 
-				pageContent = driver.get(div.find('a')['href'])
-				shoeInfo = BeautifulSoup(driver.page_source, 'html.parser')
-				availableSizes, unavailableSizes = [], []
+					
+					pageContent = driver.get(div.find('a')['href'])
+					shoeInfo = BeautifulSoup(driver.page_source, 'html.parser')
+					availableSizes, unavailableSizes = [], []
 
-				for forbidden in soup.find_all("pre"):
-					print(forbidden)
-					if('"Forbidden access"' in forbidden.get_text()):
-						print("Forbidden access found!")
-						time.sleep(60)
-						qX.put(queueObj)
+					for forbidden in soup.find_all("pre"):
+						print(forbidden)
+						if('"Forbidden access"' in forbidden.get_text()):
+							print("Forbidden access found!")
+							qX.put(queueObj)
+							break
 
-				for size in shoeInfo.find_all("input", {"name": "skuAndSize"}):
-					if('disabled' in str(size)):
-						tempSizeArray = str(size).split('"')
-						unavailableSizes.append(tempSizeArray[1])
-					else:
-						tempSizeArray = str(size).split('"')
-						availableSizes.append(tempSizeArray[1])
+					for size in shoeInfo.find_all("input", {"name": "skuAndSize"}):
+						if('disabled' in str(size)):
+							tempSizeArray = str(size).split('"')
+							unavailableSizes.append(tempSizeArray[1])
+						else:
+							tempSizeArray = str(size).split('"')
+							availableSizes.append(tempSizeArray[1])
 
-				shoe['available'] = str(availableSizes)
-				shoe['unavailable'] = str(unavailableSizes)
+					shoe['available'] = str(availableSizes)
+					shoe['unavailable'] = str(unavailableSizes)
 
-				if(len(availableSizes)==0 and len(unavailableSizes) == 0):
-					if(" iD" in shoe['name']):
-						pass
-					else:
-						DBCheck.emptyItem("Nike", shoe, connector)
-				else:	
-					DBCheck.check("Nike", shoe, connector)
-				time.sleep(2) 
-			driver.close()
+					if(len(availableSizes)==0 and len(unavailableSizes) == 0):
+						if(" iD" in shoe['name']):
+							pass
+						else:
+							DBCheck.emptyItem("Nike", shoe, connector)
+					else:	
+						DBCheck.check("Nike", shoe, connector)
+					#time.sleep(.5) 
+				driver.close()
 		except Exception as e:
 			print(e)
 			errorLog.log(e)
@@ -160,7 +162,7 @@ def Scrape(content):
 				threads.append(t)
 				t.start()
 				print("Thread {} launched!".format(threading.current_thread()))
-				time.sleep(2)
+				#time.sleep(2)
 		except Exception as e:
 			print(e)
 			errorLog.log(e)
