@@ -2,3 +2,5 @@ debug.log
 *.pyc
 .DS_Store
 errors.txt
+.DS_Store
+venv/.Python

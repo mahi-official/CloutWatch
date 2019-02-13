@@ -1,11 +1,12 @@
 import pymysql
 
+DB_URL = "cloutwatchdb.c5med6d4kthk.us-east-1.rds.amazonaws.com"
+DB_USER = "cloutwatch"
+DB_PASS = "psswd"
+database_name = "nike"
 
 def createNikeTable():
-	DB_URL = "localhost"
-	DB_USER = "cloutwatch"
-	DB_PASS = "psswd"
-	database_name = "nike"
+
 
 	connection = pymysql.connect(host=DB_URL,
 							 user=DB_USER,
@@ -23,10 +24,7 @@ def createNikeTable():
 
 
 def createEmptyItem():
-	DB_URL = "localhost"
-	DB_USER = "cloutwatch"
-	DB_PASS = "psswd"
-	database_name = "nike"
+
 
 	connection = pymysql.connect(host=DB_URL,
 							 user=DB_USER,
@@ -43,10 +41,7 @@ def createEmptyItem():
 			print(e)
 
 def createNotification():
-	DB_URL = "localhost"
-	DB_USER = "cloutwatch"
-	DB_PASS = "psswd"
-	database_name = "nike"
+
 
 	connection = pymysql.connect(host=DB_URL,
 							 user=DB_USER,

@@ -1,7 +1,7 @@
 import pymysql
 
 def connect(brand):
-	DB_URL = "localhost"
+	DB_URL = "cloutwatchdb.c5med6d4kthk.us-east-1.rds.amazonaws.com"
 	DB_USER = "cloutwatch"
 	DB_PASS = "psswd"
 	DB_NAME = brand.lower()

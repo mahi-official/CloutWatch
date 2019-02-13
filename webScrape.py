@@ -43,7 +43,7 @@ def bapeScrape(website):
 
 def nikeScrape(website):
 
-	if False:
+	if True:
 		content = requestWebsite(website)
 	else:
 		content = "None"

@@ -28,7 +28,7 @@ def Scrape(content):
 			soup = BeautifulSoup(f, 'html.parser')  
 			f.close()
 
-		if False:
+		if True:
 			#to download the whole page for testing, so you dont have to redownload it every time
 			f = open("Docs/nike.html", "w")
 			f.write(str(content.encode("utf-8")))
@@ -98,8 +98,7 @@ def Scrape(content):
 					obj = qX.get() 
 					div, shoe = obj[0], obj[1]
 					print("Thread: " ,threading.current_thread(), " CurrentQueue: ", qX.qsize())
-
-					
+					time.sleep(1)
 					pageContent = driver.get(div.find('a')['href'])
 					shoeInfo = BeautifulSoup(driver.page_source, 'html.parser')
 					availableSizes, unavailableSizes = [], []
