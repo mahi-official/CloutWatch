@@ -6,7 +6,7 @@ def requestProx():
 
 	proxySite = "https://www.us-proxy.org/"
 
-	driver = webdriver.Chrome()
+	driver = webdriver.Chrome('Docs/chromedriver')
 	page = driver.get(proxySite)
 	content = driver.page_source
 	driver.close()
@@ -38,7 +38,7 @@ def getDriver():
 	chrome_options.add_argument('--proxy-server=http={}'.format(currentProxy))
 	
 
-	return webdriver.Chrome(options=chrome_options)
+	return webdriver.Chrome('Docs/chromedriver',options=chrome_options)
 
 	
 

@@ -16,7 +16,7 @@ def requestWebsite(website):
 	print("Scraping: {}".format(website))
 	try:
 		
-		driver = webdriver.Chrome()
+		driver = webdriver.Chrome('Docs/chromedriver')
 		page = driver.get(website)
 
 		last_height = driver.execute_script("return document.body.scrollHeight")
