@@ -5,12 +5,14 @@ from urllib.request import Request, urlopen
 import time
 import random
 import os
+import sys
 
 import threading
 import queue
 
 import SNike
 import ChromeDriverVersion
+import errorLog
 
 
 def requestWebsite(website):
@@ -46,10 +48,14 @@ def bapeScrape(website):
 
 def nikeScrape(website):
 
-	if True:
-		content = requestWebsite(website)
-	else:
-		content = "None"
+	try:
+		if False or sys.argv[1].lower() == "save":
+			content = requestWebsite(website)
+		else:
+			content = "none"
+	except Exception as e:
+		errorLog.log(e)
+		content = "none"
 
 	SNike.Scrape(content)
 

@@ -21,19 +21,21 @@ def Scrape(content):
 
 	try:
 		#Choose in parent file weither you wanna download the file or use a pre existing version
-		if(content != "None"): 
+		if(content.lower() != "none"): 
 			soup = BeautifulSoup(content, 'html.parser')
 		else:
 			f = open("Docs/nike.html", "r")
 			soup = BeautifulSoup(f, 'html.parser')  
 			f.close()
 
-		if True:
+		if(sys.argv[1].lower() == "save"):
 			#to download the whole page for testing, so you dont have to redownload it every time
 			f = open("Docs/nike.html", "w")
 			f.write(str(content.encode("utf-8")))
 			f.close()
 			exit()
+		else:
+			pass
 
 	except Exception as e:
 		print(e)
