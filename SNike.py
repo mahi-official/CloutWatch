@@ -46,9 +46,9 @@ def Scrape(content):
 
 	print("Total amount of shoes found on page: ", len(soup.find_all("div", {"class": "grid-item-box"})))
 
-	iDCount = 0
-	normalCount = 0
-	
+	iDCount = 0 #count of shoes that use Nike iD
+	normalCount = 0	#count of shoes that dont use Nike iD
+
 	try:
 		for item in soup.find_all("div", {"class": "grid-item-box"}): #for every shoe on the front page:
 			shoe = {'name': "shoeName",
@@ -68,7 +68,7 @@ def Scrape(content):
 				shoe['link'] = div.find('a')['href'] #get the link for every individual shoe
 
 			
-			if(" iD" in shoe['name']):
+			if(" iD" in shoe['name']):#add up all the shoes that use Nike iD
 				iDCount += 1
 				#print("Skipped Nike iD: {}".format(shoe['name']))
 			else:
@@ -88,39 +88,43 @@ def Scrape(content):
 
 	def getShoeInfo(queueObj, connector):
 		try:
-			qX = queueObj
+			qX = queueObj #get thread specific queue object
 			
 			while not qX.empty():
 
-				driver = seleniumProxy.getDriver()
+				driver = seleniumProxy.getDriver() #get seleniumdriver with proxy
 
-				for i in range(20):
-					obj = qX.get() 
-					div, shoe = obj[0], obj[1]
+				for i in range(20): #do this X amount of time, then get another proxy driver
+					obj = qX.get() #get object out of thread specific queue
+					div, shoe = obj[0], obj[1] #get div and shoe out of the object
 					print("Thread: " ,threading.current_thread(), " CurrentQueue: ", qX.qsize())
 					time.sleep(1)
-					pageContent = driver.get(div.find('a')['href'])
-					shoeInfo = BeautifulSoup(driver.page_source, 'html.parser')
+
+					pageContent = driver.get(div.find('a')['href'])#get specific shoe page from div and opens it
+					shoeInfo = BeautifulSoup(driver.page_source, 'html.parser') #BS4 Parser
 					availableSizes, unavailableSizes = [], []
 
-					for forbidden in soup.find_all("pre"):
+					for forbidden in soup.find_all("pre"):#checks if page is inaccesible !!DOESNT WORK!!
 						print(forbidden)
 						if('"Forbidden access"' in forbidden.get_text()):
 							print("Forbidden access found!")
 							qX.put(queueObj)
 							break
 
-					for size in shoeInfo.find_all("input", {"name": "skuAndSize"}):
-						if('disabled' in str(size)):
+					for size in shoeInfo.find_all("input", {"name": "skuAndSize"}):#get sizes
+						if('disabled' in str(size)):#get all disabled (or unavailable sizes)
 							tempSizeArray = str(size).split('"')
 							unavailableSizes.append(tempSizeArray[1])
-						else:
+						else:#get all available sizes
 							tempSizeArray = str(size).split('"')
 							availableSizes.append(tempSizeArray[1])
 
+					#append them to the shoe object
 					shoe['available'] = str(availableSizes)
 					shoe['unavailable'] = str(unavailableSizes)
 
+					#if both size arrays are empty, theres something wrong so we add them to the emptyItem database to check out later! 
+					#This catches broken links, new drops that you cant buy yet and iD shoes that dont have " iD " in their name!
 					if(len(availableSizes)==0 and len(unavailableSizes) == 0):
 						if(" iD" in shoe['name']):
 							pass
@@ -128,6 +132,8 @@ def Scrape(content):
 							DBCheck.emptyItem("Nike", shoe, connector)
 					else:	
 						DBCheck.check("Nike", shoe, connector)
+
+						
 					#time.sleep(.5) 
 				driver.close()
 		except Exception as e:

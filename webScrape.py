@@ -10,18 +10,21 @@ import threading
 import queue
 
 import SNike
+import ChromeDriverVersion
+
 
 def requestWebsite(website):
 
 	print("Scraping: {}".format(website))
 	try:
 		
-		driver = webdriver.Chrome('Docs/chromedriver')
+		driver = webdriver.Chrome(ChromeDriverVersion.getPath())
 		page = driver.get(website)
 
 		last_height = driver.execute_script("return document.body.scrollHeight")
 		while True:
 			driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+			print("!!Scrolling!!")
 			time.sleep(1.5)
 			new_height = driver.execute_script("return document.body.scrollHeight")
 			if(new_height == last_height):

@@ -1,3 +1,7 @@
+#This script is dedicated to creating tables in a fresh database enviroment
+#this has to be run manually!
+#also make sure user 'cloutwatch' has all grants
+
 import pymysql
 
 DB_URL = "cloutwatchdb.c5med6d4kthk.us-east-1.rds.amazonaws.com"

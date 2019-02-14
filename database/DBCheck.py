@@ -37,17 +37,22 @@ def check(brand, item, connector):
 		#if it doesnt -> replace the item
 
 		try:
+			#gets all the entries with a certain name & matching link
 			cursor.execute("SELECT * FROM data WHERE link = '{}' AND name = '{}'".format(item['link'], item['name']))
 			rows = cursor.fetchall()
+			#if the query returns something empty:
 			if(len(rows) == 0):
+				#most likely item doesnt exist yet in database
+				#so we add it to the database
 				insert(item)
+				#also adds to notification database with type 'new'
 				notification("new", item)
 				print("{} put in {} DB".format(item['name'], brand))
 			else:
-				print("{} allready exist in database!".format(item['name']))
-
+				#item allready exists in database
 				changeStr = ""
-				shoe = rows[0]
+				shoe = rows[0] #get row
+				#if what exists in the dabase is not equal to what we just scraped
 				if(shoe != item):
 					change = {'name': "shoeName",
 							'price': "$000",
@@ -55,7 +60,7 @@ def check(brand, item, connector):
 							'available': [1,2,3],
 							'unavailable': [-1,-2,-3]}
 
-
+					#if price is not equal
 					if(item['price'] != shoe['price']):
 						changeStr += "||price|| "
 						notification("price", item)
@@ -63,6 +68,7 @@ def check(brand, item, connector):
 					else:
 						change['price'] = item['price']
 
+					#if the availability is not equal
 					if(item['available'] != item['available']):
 						changeStr += "||available|| "
 						notification("available", item)
@@ -80,6 +86,8 @@ def check(brand, item, connector):
 						print("Updated {}: {}".format(change['name'], changeStr))
 						
 					update(change)
+				else:
+					print("{} allready exist in database!".format(item['name']))
 
 
 		except Exception as e:
