@@ -20,10 +20,9 @@ def getPath():
 			elif(os == "darwin"):
 				currentPath = macpath
 
-			print(currentPath)
+			print("ChromeDriver found: ", currentPath)
 			return currentPath
 		else:
-			print(currentPath)
 			return currentPath
 	except Exception as e:
 		print(e)

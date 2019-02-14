@@ -98,7 +98,7 @@ def emptyItem(brand, item, connector):
 	with connector.cursor() as cursor:
 		#put item in dbfails because its empty
 		try:
-			cursor.execute("""INSERT INTO emptyitem (name, price, link, available, unavailable) VALUES ("{}", "{}","{}", "{}", "{}")""".format(item['name'],
+			cursor.execute("""INSERT INTO emptyItem (name, price, link, available, unavailable) VALUES ("{}", "{}","{}", "{}", "{}")""".format(item['name'],
 																																		  item['price'], 
 																																		  item['link'], 
 																																		  item['available'], 
