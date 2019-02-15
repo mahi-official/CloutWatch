@@ -1,0 +1,12 @@
+Documentation about threads
+
+THREAD INPUT: array['origin', [ARGS]]
+
+origin: means where the call originates from (ie: SNike.py, SAdidas.py, SWherever.py) so the thread knows what function to launch!
+
+args: all the information args it needs to run that specific function
+
+THREAD OUTPUT: function call in origin (most likely get shoeInfo or something similar)
+
+
+
