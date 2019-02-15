@@ -167,7 +167,4 @@ def Scrape(content):
 			print(e)
 			errorLog.log(e)
 
-	while not q1.empty() and not q2.empty(): #sleep till secondary queue's are done
-		time.sleep(1)
-
 	exit()
