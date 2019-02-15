@@ -2,7 +2,7 @@ Documentation about threads
 
 THREAD INPUT: array['origin', [ARGS]]
 
-origin: means where the call originates from (ie: SNike.py, SAdidas.py, SWherever.py) so the thread knows what function to launch!
+origin: means where the call originates from (ie: SNike, SAdidas, SWherever) so the thread knows what function to launch!
 
 args: all the information args it needs to run that specific function
 

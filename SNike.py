@@ -162,7 +162,7 @@ def Scrape(content):
 	while not q.empty():
 		try:
 			threadArgs = [q.get(), DBConnector.connect("nike")]
-			ThreadingBalancer.startThread("SNike", threadArgs)
+			ThreadingBalancer.queueThread("SNike", threadArgs)
 		except Exception as e:
 			print(e)
 			errorLog.log(e)
