@@ -47,7 +47,6 @@ def getShoeInfo(queueObj, connector):
 					else:#get all available sizes
 						tempSizeArray = str(size).split('"')
 						availableSizes.append(tempSizeArray[3])
-				time.sleep(2)
 				#append them to the shoe object
 				shoe['available'] = str(availableSizes)
 				shoe['unavailable'] = str(unavailableSizes)
@@ -71,6 +70,7 @@ def getShoeInfo(queueObj, connector):
 
 def Scrape(content):
 
+
 	try:
 		#Choose in parent file weither you wanna download the file or use a pre existing version
 		if(content.lower() != "none"): 
@@ -85,6 +85,7 @@ def Scrape(content):
 			f = open("Docs/nike.html", "w")
 			f.write(str(content.encode("utf-8")))
 			f.close()
+			print("HTML page saved!")
 			exit()
 		else:
 			pass
