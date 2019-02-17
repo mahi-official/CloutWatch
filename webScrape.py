@@ -40,6 +40,7 @@ def requestWebsite(website):
 		return content
 	except Exception as e:
 		print(e)
+		errorLog.log(e)
 
 def bapeScrape(website):        
 	page = requestWebsite(website)

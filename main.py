@@ -1,5 +1,6 @@
 import os
 from webScrape import *
+import ThreadingBalancer
 
 def getWebsites():
 	websites = []
@@ -35,6 +36,7 @@ def websiteFilter(website):
 		vloneScrape(website)
 
 def main():
+	ThreadingBalancer.startThreading()
 	for website in getWebsites():
 		websiteFilter(website)
 

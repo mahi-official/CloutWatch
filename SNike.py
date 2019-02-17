@@ -8,6 +8,7 @@ import sys
 
 import threading
 import queue
+import asyncio
 
 import ThreadingBalancer
 
@@ -19,6 +20,7 @@ import sanetizeInput
 import seleniumProxy
 
 global sleeptime
+
 
 def getShoeInfo(queueObj, connector):
 	try:
@@ -94,7 +96,7 @@ def Scrape(content):
 	nikeresult = [] #define nikeresult list and threadlist
 	q,q1,q2 = queue.Queue(),queue.Queue(),queue.Queue() #define all queue's q1 and q2 are for the threads
 	count = 1 #counter for queue division
-	queueObj = [q1, q2] #queue object containing all secondary queues
+	queueObj = [q1] #queue object containing all secondary queues
 
 	print("Total amount of shoes found on page: ", len(soup.find_all("div", {"class": "grid-item-box"})))
 
@@ -160,6 +162,7 @@ def Scrape(content):
 		errorLog.log(e)
 
 	while not q.empty():
+		print(q.qsize())
 		try:
 			threadArgs = [q.get(), DBConnector.connect("nike")]
 			ThreadingBalancer.queueThread("SNike", threadArgs)
