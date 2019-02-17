@@ -37,27 +37,32 @@ async def on_message(message):
 
 	if (message.author.id != client.user.id):   # Prevent the bot from responding to itself and creating a loop
 		# Example conditions
-		if message.content.startswith('!Spark'):
+		if message.content.lower().startswith('!Spark'):
 			# Execute this code
 			response = '!Spark Command Recieved.'
 
 			# Send message back to the Discord channel
 			await client.send_message(message.channel, response)
 
-		elif message.content.startswith('!S'):
+		elif message.content.lower().startswith('!s'):
 			# Execute this code
 
 			msgContent = str(message.content[len('!S'):].strip())
 			if(msgContent != ""):
 				if(msgContent.lower() == "nike"):
-					response = getNotification.get("nike")
+					await client.send_message(message.channel, "Got it! Fetching information, hang tight!")
+					await client.send_message(message.channel, getNotification.get("nike"))
+				elif(msgContent.lower() == "nike10"):
+					await client.send_message(message.channel, "Got it! Fetching information, hang tight!")
+					response = getNotification.get10("nike")
+					for item in response:
+						await client.send_message(message.channel, item)
 				else:
 					response = "Ayy there, I haven't built that yet!"
+					await client.send_message(message.channel, response)
 			else:
 				response = "You need to actually say something, cuz idk what you want me to do!"
+				await client.send_message(message.channel, response)
 
-
-			# Send message back to the Discord channel
-			await client.send_message(message.channel, response)
 
 client.run(dc.discord_token)     #Start the async event listeners, dc.discord_token is located in discord_config.py

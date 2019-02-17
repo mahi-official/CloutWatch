@@ -34,20 +34,20 @@ def getShoeInfo(queueObj, connector):
 				obj = qX.get() #get object out of thread specific queue
 				div, shoe = obj[0], obj[1] #get div and shoe out of the object
 				print("Thread: " ,threading.current_thread(), " CurrentQueue: ", qX.qsize())
-				time.sleep(1)
 
 				pageContent = driver.get(div.find('a')['href'])#get specific shoe page from div and opens it
 				shoeInfo = BeautifulSoup(driver.page_source, 'html.parser') #BS4 Parser
+
 				availableSizes, unavailableSizes = [], []
 
 				for size in shoeInfo.find_all("input", {"name": "skuAndSize"}):#get sizes
 					if('disabled' in str(size)):#get all disabled (or unavailable sizes)
 						tempSizeArray = str(size).split('"')
-						unavailableSizes.append(tempSizeArray[1])
+						unavailableSizes.append(tempSizeArray[3])
 					else:#get all available sizes
 						tempSizeArray = str(size).split('"')
-						availableSizes.append(tempSizeArray[1])
-
+						availableSizes.append(tempSizeArray[3])
+				time.sleep(2)
 				#append them to the shoe object
 				shoe['available'] = str(availableSizes)
 				shoe['unavailable'] = str(unavailableSizes)
@@ -162,7 +162,6 @@ def Scrape(content):
 		errorLog.log(e)
 
 	while not q.empty():
-		print(q.qsize())
 		try:
 			threadArgs = [q.get(), DBConnector.connect("nike")]
 			ThreadingBalancer.queueThread("SNike", threadArgs)
