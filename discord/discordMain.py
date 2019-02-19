@@ -9,12 +9,20 @@ import discord_config as dc   #contains the discord bot token
 # Import discord and asynico libraries
 import discord     #API wrapper for Discord - https://github.com/Rapptz/discord.py
 import asyncio     #Asynchronous library for executing code when a message is recieved from discord
+import threading
 
-
+import databaseChecker
 import getNotification
 
+threads = []
 
+def callDatabaseChecker(client):
+	databaseChecker.main(client)
 
+def createThread(client):
+	t = threading.Thread(target=callDatabaseChecker, args=(client,))
+	threads.append(t)
+	t.start()
 
 client = discord.Client()   #Create a disord.Client object for handling messages
 
@@ -25,6 +33,7 @@ async def on_ready():
 	print(client.user.name)
 	print(client.user.id)
 	print('\n')
+	createThread(client)
 
 
 # this function will execute when a message is sent to a channel that the discord bot has read access
@@ -53,16 +62,16 @@ async def on_message(message):
 					await client.send_message(message.channel, "Got it! Fetching information, hang tight!")
 					await client.send_message(message.channel, getNotification.get("nike"))
 				elif(msgContent.lower() == "nike10"):
-					await client.send_message(message.channel, "Got it! Fetching information, hang tight!")
-					response = getNotification.get10("nike")
-					for item in response:
-						await client.send_message(message.channel, item)
+					#await client.send_message(message.channel, "Got it! Fetching information, hang tight!")
+					#response = getNotification.get10("nike")
+					#for item in response:
+					#	await client.send_message(message.channel, item)
+					pass	
 				else:
 					response = "Ayy there, I haven't built that yet!"
 					await client.send_message(message.channel, response)
 			else:
 				response = "You need to actually say something, cuz idk what you want me to do!"
 				await client.send_message(message.channel, response)
-
 
 client.run(dc.discord_token)     #Start the async event listeners, dc.discord_token is located in discord_config.py

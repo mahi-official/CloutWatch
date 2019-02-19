@@ -20,6 +20,7 @@ import sanetizeInput
 import seleniumProxy
 
 global sleeptime
+numOfQueues = 2
 
 
 def getShoeInfo(queueObj, connector):
@@ -30,7 +31,7 @@ def getShoeInfo(queueObj, connector):
 
 			driver = seleniumProxy.getDriver() #get seleniumdriver with proxy
 
-			for i in range(20): #do this X amount of time, then get another proxy driver
+			for i in range(5): #do this X amount of time, then get another proxy driver
 				obj = qX.get() #get object out of thread specific queue
 				div, shoe = obj[0], obj[1] #get div and shoe out of the object
 				print("Thread: " ,threading.current_thread(), " CurrentQueue: ", qX.qsize())
@@ -95,9 +96,12 @@ def Scrape(content):
 		errorLog.log(e)
 
 	nikeresult = [] #define nikeresult list and threadlist
-	q,q1,q2 = queue.Queue(),queue.Queue(),queue.Queue() #define all queue's q1 and q2 are for the threads
+	q = queue.Queue()
+	queueObj = [] #queue object containing all secondary queues
+	for ql in range(numOfQueues):
+		queueObj.append(queue.Queue())
 	count = 1 #counter for queue division
-	queueObj = [q1] #queue object containing all secondary queues
+
 
 	print("Total amount of shoes found on page: ", len(soup.find_all("div", {"class": "grid-item-box"})))
 
@@ -145,12 +149,12 @@ def Scrape(content):
 
 		random.shuffle(nikeresult)
 		while len(nikeresult) != 0: #splitting up the queues in multiple secondary queues that are given to each individual thread
-			#queueObj[count-1].put(nikeresult.pop(0))
-			#if(count == 2):
-			#	count = 1
-			#else:
-			#	count += 1
-			queueObj[0].put(nikeresult.pop(0))
+			queueObj[count-1].put(nikeresult.pop(0))
+			if(count == len(queueObj)):
+				count = 1
+			else:
+				count += 1
+			#queueObj[0].put(nikeresult.pop(0))
 			
 		for qObj in queueObj:
 			print(qObj, "Contains: ", qObj.qsize(), " Items")

@@ -7,7 +7,7 @@ import DBConnector
 def get(brand):
 	try:
 		with DBConnector.connect(brand).cursor() as cursor:
-			cursor.execute("SELECT id, type, name, price, link, available FROM notification ORDER BY id DESC LIMIT 1;")
+			cursor.execute("SELECT * FROM notification ORDER BY id DESC LIMIT 1;")
 			return cursor.fetchall()
 	except Exception as e:
 		return "Something went wrong! Try again later!" + str(e)
