@@ -50,7 +50,7 @@ def bapeScrape(website):
 def nikeScrape(website):
 
 	try:
-		if False or sys.argv[1].lower() == "save":
+		if True or sys.argv[1].lower() == "save":
 			content = requestWebsite(website)
 		else:
 			content = "none"

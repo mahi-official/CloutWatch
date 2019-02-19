@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import ChromeDriverVersion
 import errorLog
+import random
 
 import time
 
@@ -28,7 +29,7 @@ def requestProx():
 				p.append(time.time())
 				usableProxies.append(p)
 
-		return usableProxies[0]
+		return usableProxies[random.randint(0, round(len(usableProxies)/2, 0))]
 	except Exception as e:
 		print(e)
 		errorLog.log(e)

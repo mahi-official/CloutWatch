@@ -22,7 +22,6 @@ import seleniumProxy
 global sleeptime
 numOfQueues = 2
 
-
 def getShoeInfo(queueObj, connector):
 	try:
 		qX = queueObj #get thread specific queue object
@@ -38,7 +37,7 @@ def getShoeInfo(queueObj, connector):
 
 				pageContent = driver.get(div.find('a')['href'])#get specific shoe page from div and opens it
 				shoeInfo = BeautifulSoup(driver.page_source, 'html.parser') #BS4 Parser
-
+				sleep(1)
 				availableSizes, unavailableSizes = [], []
 
 				for size in shoeInfo.find_all("input", {"name": "skuAndSize"}):#get sizes
