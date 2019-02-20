@@ -50,6 +50,4 @@ def getDriver():
 	except Exception as e:
 		print(e)
 		errorLog.log(e)
-	
-getDriver()
 

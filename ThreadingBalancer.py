@@ -15,9 +15,9 @@ def addThread():
 			try:
 				if(threading.active_count() <= 6):
 					qItem = q.get()
-					origin, args = qItem[0], qItem[1]
-					if(origin == "SNike"):
-						t = threading.Thread(target=SNike.getShoeInfo, args=(args[0],args[1],))
+					origin, args = qItem[0], qItem[1] #qItem[0] = brand.   qItem[1] = [q.get(), DBConnector.connect("nike")]
+					if(origin == "nike"):
+						t = threading.Thread(target=SNike.getCurrentItem, args=(args[0],args[1],))
 						threads.append(t)
 						t.start()
 						print("Thread {} launched!".format(threading.current_thread()))
@@ -35,7 +35,7 @@ def queueThread(origin, args):
 	q.put(qItem)
 
 def startThreading(): 
-	print("Starting master thread")
+	print("Starting master thread 1/1!")
 	t = threading.Thread(target=addThread,)
 	threads.append(t)
 	t.start()
