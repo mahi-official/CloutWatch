@@ -10,7 +10,7 @@ import sys
 import threading
 import queue
 
-import SNike
+import SMain
 import ChromeDriverVersion
 import errorLog
 
@@ -48,7 +48,7 @@ def bapeScrape(website):
 	return soup
 
 def nikeScrape(website):
-
+	
 	try:
 		if False or sys.argv[1].lower() == "save":
 			content = requestWebsite(website)
@@ -58,7 +58,7 @@ def nikeScrape(website):
 		errorLog.log(e)
 		content = "none"
 
-	SNike.Scrape(content, "nike")
+	SMain.Scrape(content, "nike")
 
 
 def adidasScrape(website):
