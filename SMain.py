@@ -18,7 +18,7 @@ import database.DBConnector as DBConnector
 import errorLog
 import seleniumProxy
 
-from scrapers import SNike, sanetizeString
+from scrapers import SNike
 numOfQueues = 2
 
 def Scrape(content, brand):
@@ -55,7 +55,7 @@ def Scrape(content, brand):
 
 	def scrapeSoup(soup):
 
-		scraperesult, scrapeResultFailed = SNike.frontPageScrape(soup)		
+		scrapeResult, scrapeResultFailed = SNike.frontPageScrape(soup)		
 		print("{} found {} items and skipped {} ".format(brand.upper(), len(scrapeResult), len(scrapeResultFailed)))
 		return scrapeResult
 
@@ -76,9 +76,8 @@ def Scrape(content, brand):
 		random.shuffle(scrapeResult)
 
 		count = 1
-		scrapeLen = len(scrapeResult)
-		for x in range(scrapeLen):
-			queueObj[count-1].put(scrapeResult.pop())
+		for x in range(len(scrapeResult)):
+			queueObj[count-1].put(scrapeResult[x])
 			if(count == len(queueObj)):
 				count = 1
 			else:
@@ -89,7 +88,7 @@ def Scrape(content, brand):
 		for obj in queueObj:
 			q.put(obj)
 
-		print("{} mainQueue has {} sub-queues, each containing: {} objects!".format(brand.upper(), q.qsize(), round(scrapeLen/ q.qsize())))
+		print("{} mainQueue has {} sub-queues, each containing: {} objects!".format(brand.upper(), q.qsize(), round(len(scrapeResult)/ q.qsize())))
 
 
 		return q
@@ -113,21 +112,26 @@ def getCurrentItem(brand, queueObj, connector):
 	try:	
 		while not queueObj.empty():
 
-			def getContent(currentItem, driver):
+			def getContent(queueObj, driver):
+				
 				for i in range(10):
 
+					currentItem = queueObj.get()
 					driver.get(currentItem['link'])
 					currentItemSoup = BeautifulSoup(driver.page_source, 'html.parser') 
-					
-					currentItem, availableSizes, unavailableSizes = SNike.itemScrape(currentItem)
+				
+					currentItem, availableSizes, unavailableSizes = SNike.itemScrape(currentItemSoup, currentItem)
 
-					if(len(availableSizes)==0 and len(unavailableSizes) == 0):
+					if(len(availableSizes)== 0 and len(unavailableSizes) == 0):
 						DBCheck.emptyItem(brand, currentItem, connector)
 					else:	
 						DBCheck.check(brand, currentItem, connector)
+
 				driver.close()
 
-			getContent(queueObj.get(), seleniumProxy.getDriver())
+
+			
+			getContent(queueObj, seleniumProxy.getDriver())
 
 	except Exception as e:
 		print("GETCURRENTITEM ERROR: {}".format(e))

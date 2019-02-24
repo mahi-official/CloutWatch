@@ -8,7 +8,7 @@ def frontPageScrape(soup):
 	for item in soup.find_all("div", {"class": "grid-item-box"}):
 		currentItem = {}
 		for productname in item.find_all("p", {"class": "product-display-name nsg-font-family--base edf-font-size--regular nsg-text--dark-grey"}):
-			currentItem['name'] = sanetizeString.clean(productname.get_text().strip())
+			currentItem['name'] = scrapers.sanitizeString.cleanString(productname.get_text().strip())
 		for price in item.find_all("span", {"class": "local nsg-font-family--base"}):
 			currentItem['price'] = price.get_text().strip() 
 		for div in item.find_all("div", {"class": "grid-item-image-wrapper sprite-sheet sprite-index-0"}):			
@@ -23,7 +23,7 @@ def frontPageScrape(soup):
 
 
 
-def itemScrape(currentItem):
+def itemScrape(currentItemSoup ,currentItem):
 
 	availableSizes, unavailableSizes = [], []
 

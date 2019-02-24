@@ -16,13 +16,13 @@ def addThread():
 				if(threading.active_count() <= 6):
 					qItem = q.get()
 					brand, args = qItem[0], qItem[1] #qItem[0] = brand.   qItem[1] = [q.get(), DBConnector.connect("nike")]
-					if(origin == "nike"):
+					if(brand == "nike"):
 						t = threading.Thread(target=SMain.getCurrentItem, args=(brand, args[0],args[1],))
 						threads.append(t)
 						t.start()
 						print("Thread {} launched!".format(threading.current_thread()))
 					else:
-						error = "Unable to launch thread! origin invalid: {}".format(origin)
+						error = "Unable to launch thread! brand invalid: {}".format(brand)
 						print(error)
 						errorLog.log(error)
 			except Exception as e:

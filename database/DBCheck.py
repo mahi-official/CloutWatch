@@ -54,12 +54,7 @@ def check(brand, item, connector):
 				shoe = rows[0] #get row
 				#if what exists in the dabase is not equal to what we just scraped
 				if(shoe != item):
-					change = {'name': "shoeName",
-							'price': "$000",
-							'link': "https://nike.com/shoe",
-							'available': [1,2,3],
-							'unavailable': [-1,-2,-3]}
-
+					change = {}
 					#if price is not equal
 					if(item['price'] != shoe['price']):
 						changeStr += "||price|| "
@@ -81,7 +76,8 @@ def check(brand, item, connector):
 					change['unavailable'] = item['unavailable']	
 
 					if(changeStr == ""):
-						print("Nothing Changed {}".format(change['name']))
+						pass
+						#print("Nothing Changed {}".format(change['name']))
 					else:
 						print("Updated {}: {}".format(change['name'], changeStr))
 						
@@ -91,8 +87,8 @@ def check(brand, item, connector):
 
 
 		except Exception as e:
-			print(e)
-			errorLog.log(e)
+			print("DB ERROR: {}".format(e))
+			errorLog.log("DB ERROR: {}".format(e))
 
 def emptyItem(brand, item, connector):
 	with connector.cursor() as cursor:
