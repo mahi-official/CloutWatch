@@ -51,29 +51,29 @@ def check(brand, item, connector):
 			else:
 				#item allready exists in database
 				changeStr = ""
-				shoe = rows[0] #get row
+				itemInDB = rows[0] #get row
 				#if what exists in the dabase is not equal to what we just scraped
-				if(shoe != item):
+				if(itemInDB != item):
 					change = {}
 					#if price is not equal
-					if(item['price'] != shoe['price']):
-						changeStr += "||price|| "
+					if(item['price'] != itemInDB['price']):
+						changeStr += "price update!"
 						notification("price", item)
-						change['price'] = shoe['price']
+
+						change['price'] = itemInDB['price']
 					else:
 						change['price'] = item['price']
 
 					#if the availability is not equal
 					if(item['available'] != item['available']):
-						changeStr += "||available|| "
+						changeStr += "available update!"
 						notification("available", item)
-						change['available'] = shoe['available']
+
+						change['available'] = itemInDB['available']
 					else:
 						change['available'] = item['available']
 
-					change['name'] = item['name']
-					change['link'] = item['link']
-					change['unavailable'] = item['unavailable']	
+					change['name'], change['link'], change['unavailable'] = item['name'], item['link'], item['unavailable']	
 
 					if(changeStr == ""):
 						pass

@@ -1,5 +1,4 @@
 from selenium import webdriver
-from selenium.webdriver.common.proxy import Proxy, ProxyType
 from bs4 import BeautifulSoup
 import time
 import random
@@ -8,7 +7,6 @@ import sys
 
 import threading
 import queue
-import asyncio
 
 import ThreadingBalancer
 

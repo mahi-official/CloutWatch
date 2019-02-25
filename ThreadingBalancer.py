@@ -7,8 +7,6 @@ import errorLog
 threads = []
 q = queue.Queue()
 
-
-
 def addThread():
 	while True:
 		while not q.empty():
@@ -22,9 +20,8 @@ def addThread():
 						t.start()
 						print("Thread {} launched!".format(threading.current_thread()))
 					else:
-						error = "Unable to launch thread! brand invalid: {}".format(brand)
-						print(error)
-						errorLog.log(error)
+						print("Unable to launch thread! brand invalid: {}".format(brand))
+						errorLog.log("Unable to launch thread! brand invalid: {}".format(brand))
 			except Exception as e:
 				print(e)
 				errorLog.log(e)

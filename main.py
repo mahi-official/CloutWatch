@@ -1,5 +1,4 @@
 import os
-from webScrape import *
 import ThreadingBalancer
 from selenium import webdriver
 from bs4 import BeautifulSoup
@@ -66,23 +65,23 @@ def LoadOrSave(website):
 def websiteFilter(website):
 
 	if(website == "https://us.bape.com/"):
-		bapeScrape(website)
+		SMain.Scrape(LoadOrSave(website), "bape")
 	elif(website == "https://store.nike.com/us/en_us/pw/mens-shoes/7puZoi3"):
 		SMain.Scrape(LoadOrSave(website), "nike")
 	elif(website == "https://www.adidas.com/us"):
-		adidasScrape(website)
+		SMain.Scrape(LoadOrSave(website), "adidas")
 	elif(website == "https://yeezysupply.com/"):
-		yeezyScrape(website)
+		SMain.Scrape(LoadOrSave(website), "yeezy")
 	elif(website == "https://kith.com/"):
-		kithScrape(website)
+		SMain.Scrape(LoadOrSave(website), "kith")
 	elif(website == "https://undefeated.com/"):
-		undefeatedScrape(website)
+		SMain.Scrape(LoadOrSave(website), "undefeated")
 	elif(website == "https://www.palaceskateboards.com/"):
-		palaceskateboardsScrape(website)
+		SMain.Scrape(LoadOrSave(website), "palaceskateboards")
 	elif(website == "https://shop.doverstreetmarket.com/us/"):
-		doverstreetmarketScrape(website)
+		SMain.Scrape(LoadOrSave(website), "doverstreetmarket")
 	elif(website == "https://vlone.co/"):
-		vloneScrape(website)
+		SMain.Scrape(LoadOrSave(website), "vlone")
 
 def main():
 	ThreadingBalancer.startThreading()
