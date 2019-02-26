@@ -9,6 +9,7 @@ currentPath = ""
 
 os = sys.platform
 
+
 def getPath():
 	try:
 		global currentPath

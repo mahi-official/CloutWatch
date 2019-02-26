@@ -7,6 +7,15 @@ import random
 
 import time
 
+
+try:
+	if(sys.argv[1] == "-v" or sys.argv[2] == "-v"):
+		verbose = True
+	else:
+		verbose = False
+except:
+	verbose = False
+
 def requestProx():
 
 	try:
@@ -40,7 +49,9 @@ def getDriver():
 
 		currentProxy = requestProx() 
 		proxy = "{}:{}".format(currentProxy[0],currentProxy[1])
-		print("Fetched new proxy: {}".format(proxy))
+		if(verbose == True):
+			print("Fetched new proxy: {}".format(proxy))
+
 		chrome_options = webdriver.ChromeOptions()
 		chrome_options.add_argument('--proxy-server=http={}'.format(currentProxy))
 

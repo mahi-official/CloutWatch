@@ -1,5 +1,15 @@
 import time
 import errorLog
+import sys
+
+try:
+	if(sys.argv[1] == "-v" or sys.argv[2] == "-v"):
+		verbose = True
+	else:
+		verbose = False
+except:
+	verbose = False
+
 
 def check(brand, item, connector):
 
@@ -42,12 +52,11 @@ def check(brand, item, connector):
 			rows = cursor.fetchall()
 			#if the query returns something empty:
 			if(len(rows) == 0):
-				#most likely item doesnt exist yet in database
-				#so we add it to the database
+
 				insert(item)
-				#also adds to notification database with type 'new'
 				notification("new", item)
-				print("{} put in {} DB".format(item['name'], brand))
+				if(verbose == True):
+					print("{} put in {} DB".format(item['name'], brand))
 			else:
 				#item allready exists in database
 				changeStr = ""
@@ -77,13 +86,14 @@ def check(brand, item, connector):
 
 					if(changeStr == ""):
 						pass
-						#print("Nothing Changed {}".format(change['name']))
 					else:
-						print("Updated {}: {}".format(change['name'], changeStr))
+						if(verbose == True):
+							print("Updated {}: {}".format(change['name'], changeStr))
 						
 					update(change)
 				else:
-					print("{} allready exist in database!".format(item['name']))
+					if(verbose == True):
+						print("{} allready exist in database!".format(item['name']))
 
 
 		except Exception as e:
