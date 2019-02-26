@@ -35,7 +35,7 @@ def itemScrape(currentItemSoup ,currentItem):
 			tempSizeArray = str(size).split('"')
 			availableSizes.append(tempSizeArray[3])
 
-		currentItem['available'] = str(availableSizes)
-		currentItem['unavailable'] = str(unavailableSizes)
+	currentItem['available'] = str(availableSizes)
+	currentItem['unavailable'] = str(unavailableSizes)
 
 	return currentItem, availableSizes, unavailableSizes
