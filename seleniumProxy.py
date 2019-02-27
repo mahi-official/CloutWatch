@@ -23,7 +23,13 @@ def requestProx():
 		
 		proxySite = "https://www.us-proxy.org/"
 
-		driver = webdriver.Chrome(str(ChromeDriverVersion.getPath()))
+		
+		if(verbose == False):
+			chrome_options = webdriver.ChromeOptions()
+			chrome_options.add_argument('--headless')
+			chrome_options.add_argument('--disable-gpu')
+
+		driver = webdriver.Chrome(str(ChromeDriverVersion.getPath()), options=chrome_options)
 		page = driver.get(proxySite)
 		content = driver.page_source
 		driver.close()
@@ -54,6 +60,9 @@ def getDriver():
 
 		chrome_options = webdriver.ChromeOptions()
 		chrome_options.add_argument('--proxy-server=http={}'.format(currentProxy))
+		if(verbose == False):
+			chrome_options.add_argument('--headless')
+			chrome_options.add_argument('--disable-gpu')
 
 		return webdriver.Chrome(str(ChromeDriverVersion.getPath()),options=chrome_options)
 
