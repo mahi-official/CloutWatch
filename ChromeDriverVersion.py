@@ -23,6 +23,7 @@ workingOS = sys.platform
 
 def unzip(zippath, ospath):
 	import zipfile
+	print("Unzipping: " + zippath)
 	currentZip = zipfile.ZipFile(zippath, 'r')
 	currentZip.extractall(ospath)
 	currentZip.close()
@@ -34,7 +35,7 @@ def getPath():
 		global currentPath
 		if(currentPath == ""):
 			if(workingOS == "linux"):
-				if(os.path.exists(linuxchromedriverpath)):
+				if(os.path.isfile(linuxchromedriverpath)):
 					currentPath = linuxchromedriverpath
 					print("Linux ChromeDriver found: " + currentPath)
 				else:
@@ -42,7 +43,7 @@ def getPath():
 					getPath()
 
 			elif(workingOS == "win32" or os == "cygwin"):
-				if(os.path.exists(macchromedriverpath)):
+				if(os.path.isfile(macchromedriverpath)):
 					currentPath = windowschromedriverpath
 					print("Windows ChromeDriver found: " + currentPath)
 				else:
@@ -50,7 +51,7 @@ def getPath():
 					getPath()
 
 			elif(workingOS == "darwin"):
-				if(os.path.exists(macchromedriverpath)):
+				if(os.path.isfile(macchromedriverpath)):
 					currentPath = macchromedriverpath
 					print("macOS ChromeDriver found: " + currentPath)
 				else:
