@@ -35,12 +35,14 @@ except:
 def getchrome_options(currentUsableProxy):
 
 	chrome_options = webdriver.ChromeOptions()
-	if(verbose != True):
+	if(verbose == False):
 			chrome_options.add_argument('--headless')
 			chrome_options.add_argument('--disable-gpu')
 
-	if(currentUsableProxy != "" or currentUsableProxy != None):
+	if(currentUsableProxy != ""):
 			chrome_options.add_argument('--proxy-server=http={}'.format(currentUsableProxy))
+	else:
+		pass
 
 	return chrome_options
 
@@ -80,10 +82,7 @@ def getDriver():
 		if(verbose == True):
 			print("Fetched new proxy: {}".format(proxy))
 
-		if(verify() == True):
-			return webdriver.Chrome(str(ChromeDriverVersion.getPath()),options=getchrome_options(currentProxy))
-		else:
-			return None
+		return webdriver.Chrome(str(ChromeDriverVersion.getPath()),options=getchrome_options(currentProxy))
 
 	except Exception as e:
 		print(e)

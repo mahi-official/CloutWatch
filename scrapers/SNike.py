@@ -31,7 +31,7 @@ def itemScrape(currentItemSoup ,currentItem):
 		if('disabled' in str(size)):
 			tempSizeArray = str(size).split('"')
 			unavailableSizes.append(tempSizeArray[3])
-		else:
+		else: 
 			tempSizeArray = str(size).split('"')
 			availableSizes.append(tempSizeArray[3])
 
