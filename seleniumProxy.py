@@ -7,6 +7,22 @@ import random
 
 import time
 
+import pymysql
+import database.DBConnector as DBConnector
+
+def verify():
+	try:
+		with DBConnector.connectVerify().cursor as cursor:
+			cursor.execute("SELECT * FROM verify")
+			for row in cursor.fetchall():
+				if(row[0] == True):
+					return True
+				else: 
+					return False
+	except:
+		print("SOMETHING IS WOOPSIE POOPSIE, verification database is either offline or broken. Until fixed, chromedrivers and proxies wont load meaning the bot's database wont update!")
+		return False
+
 
 try:
 	if(sys.argv[1] == "-v" or sys.argv[2] == "-v"):
@@ -16,6 +32,18 @@ try:
 except:
 	verbose = False
 
+def getchrome_options(currentUsableProxy):
+
+	chrome_options = webdriver.ChromeOptions()
+	if(verbose != True):
+			chrome_options.add_argument('--headless')
+			chrome_options.add_argument('--disable-gpu')
+
+	if(currentUsableProxy != "" or currentUsableProxy != None):
+			chrome_options.add_argument('--proxy-server=http={}'.format(currentUsableProxy))
+
+	return chrome_options
+
 def requestProx():
 
 	try:
@@ -23,13 +51,7 @@ def requestProx():
 		
 		proxySite = "https://www.us-proxy.org/"
 
-		chrome_options = webdriver.ChromeOptions()
-		if(verbose == False):
-			
-			chrome_options.add_argument('--headless')
-			chrome_options.add_argument('--disable-gpu')
-
-		driver = webdriver.Chrome(str(ChromeDriverVersion.getPath()), options=chrome_options)
+		driver = webdriver.Chrome(str(ChromeDriverVersion.getPath()), options=getchrome_options(""))
 		page = driver.get(proxySite)
 		content = driver.page_source
 		driver.close()
@@ -41,7 +63,7 @@ def requestProx():
 				if(td.text != ""):
 					p.append(td.text)
 			if(len(p)!= 0):
-				p.append(time.time())
+				p.append(time.time()) 
 				usableProxies.append(p)
 
 		return usableProxies[random.randint(0, round(len(usableProxies)/2, 0))]
@@ -58,14 +80,10 @@ def getDriver():
 		if(verbose == True):
 			print("Fetched new proxy: {}".format(proxy))
 
-		chrome_options = webdriver.ChromeOptions()
-		chrome_options.add_argument('--proxy-server=http={}'.format(currentProxy))
-		if(verbose == False):
-			chrome_options.add_argument('--headless')
-			chrome_options.add_argument('--disable-gpu')
-
-		return webdriver.Chrome(str(ChromeDriverVersion.getPath()),options=chrome_options)
-
+		if(verify() == True):
+			return webdriver.Chrome(str(ChromeDriverVersion.getPath()),options=getchrome_options(currentProxy))
+		else:
+			return None
 
 	except Exception as e:
 		print(e)

@@ -118,7 +118,8 @@ def getCurrentItem(brand, queueObj, connector):
 					driver.get(currentItem['link'])
 					currentItemSoup = BeautifulSoup(driver.page_source, 'html.parser') 
 				
-					currentItem, availableSizes, unavailableSizes = SNike.itemScrape(currentItemSoup, currentItem)
+					if(brand == "nike"):
+						currentItem, availableSizes, unavailableSizes = SNike.itemScrape(currentItemSoup, currentItem)
 
 					if(len(availableSizes)== 0 and len(unavailableSizes) == 0):
 						DBCheck.emptyItem(brand, currentItem, connector)
@@ -127,8 +128,6 @@ def getCurrentItem(brand, queueObj, connector):
 
 				driver.close()
 
-
-			
 			getContent(queueObj, seleniumProxy.getDriver())
 
 	except Exception as e:
