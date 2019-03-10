@@ -25,7 +25,7 @@ def verify():
 
 
 try:
-	if(sys.argv[1] == "-v" or sys.argv[2] == "-v"):
+	if(sys.argv[1] == "-v"):
 		verbose = True
 	else:
 		verbose = False
@@ -35,7 +35,7 @@ except:
 def getchrome_options(currentUsableProxy):
 
 	chrome_options = webdriver.ChromeOptions()
-	if(verbose == False):
+	if(verbose != True):
 			chrome_options.add_argument('--headless')
 			chrome_options.add_argument('--disable-gpu')
 
@@ -68,7 +68,12 @@ def requestProx():
 				p.append(time.time()) 
 				usableProxies.append(p)
 
-		return usableProxies[random.randint(0, round(len(usableProxies)/2, 0))]
+		proxySelection = random.randint(0, round(len(usableProxies)/2, 0))
+
+		if(verbose == True):
+			print(usableProxies[proxySelection])
+
+		return usableProxies[proxySelection]
 	except Exception as e:
 		print(e)
 		errorLog.log(e)

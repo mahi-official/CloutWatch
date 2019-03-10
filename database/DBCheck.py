@@ -3,7 +3,7 @@ import errorLog
 import sys
 
 try:
-	if(sys.argv[1] == "-v" or sys.argv[2] == "-v"):
+	if(sys.argv[1] == "-v"):
 		verbose = True
 	else:
 		verbose = False
@@ -25,13 +25,12 @@ def check(brand, item, connector):
 			connector.commit()
 
 		def notification(Ntype, CurrentItem):
-			cursor.execute("""INSERT INTO notification (type, unixTime, name, price, link, available, unavailable) VALUES ("{}", "{}","{}", "{}","{}", "{}", "{}")""".format(str(Ntype),
-																																round(time.time()),
-																																CurrentItem['name'],
-																																CurrentItem['price'], 
-																																CurrentItem['link'], 
-																																CurrentItem['available'], 
-																																CurrentItem['unavailable']))
+			cursor.execute("""INSERT INTO notification (type, name, price, link, available, unavailable) VALUES ("{}","{}", "{}","{}", "{}", "{}")""".format(str(Ntype),
+																																										CurrentItem['name'],
+																																										CurrentItem['price'], 
+																																										CurrentItem['link'], 
+																																										CurrentItem['available'], 
+																																										CurrentItem['unavailable']))
 			connector.commit()
 
 		def update(CurrentItem):
@@ -90,7 +89,7 @@ def check(brand, item, connector):
 						if(verbose == True):
 							print("Updated {}: {}".format(change['name'], changeStr))
 						
-					update(change)
+						update(change)
 				else:
 					if(verbose == True):
 						print("{} allready exist in database!".format(item['name']))
