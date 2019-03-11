@@ -35,6 +35,7 @@ except:
 def getchrome_options(currentUsableProxy):
 
 	chrome_options = webdriver.ChromeOptions()
+	verbose = True
 	if(verbose != True):
 			chrome_options.add_argument('--headless')
 			chrome_options.add_argument('--disable-gpu')

@@ -12,12 +12,13 @@ import ThreadingBalancer
 
 import database.DBCheck as DBCheck
 import database.DBConnector as DBConnector
+import pymysql
 
 import errorLog
 import seleniumProxy
 
 from scrapers import SNike
-numOfQueues = 5
+numOfQueues = 1
 
 def Scrape(content, brand):
 
@@ -70,12 +71,42 @@ def Scrape(content, brand):
 			queueObj.append(queue.Queue())
 		return queueObj
 
-	def divideQueues(scrapeResult, queueObj):
-		random.shuffle(scrapeResult)
+	def divideNewAndOld(scrapeResult):
+		new, old = [], []
+		with DBConnector.connect(brand).cursor() as cursor:
+			cursor.execute("SELECT * FROM data")
+			rows = cursor.fetchall()
+			
+			rowstring = ""
+			for i in range(len(rows)):
+				rowstring += str(rows[i])
+
+		for s in range(len(scrapeResult)):
+			item = scrapeResult[s]
+			if(item['name'] in rowstring):
+				old.append(scrapeResult[s])
+			else:
+				new.append(scrapeResult[s])
+
+		print("{} {} new items".format(brand.upper(), len(new)))
+		print("{} {} old items".format(brand.upper(), len(old)))
+		return new, old
+
+	def divideQueues(new, old, queueObj):
+		random.shuffle(new)
+		random.shuffle(old)
 
 		count = 1
-		for x in range(len(scrapeResult)):
-			queueObj[count-1].put(scrapeResult[x])
+		for x in range(len(new)):
+			queueObj[count-1].put(new[x])
+			if(count == len(queueObj)):
+				count = 1
+			else:
+				count += 1
+
+		count = 1
+		for x in range(len(old)):
+			queueObj[count-1].put(old[x])
 			if(count == len(queueObj)):
 				count = 1
 			else:
@@ -86,21 +117,24 @@ def Scrape(content, brand):
 		for obj in queueObj:
 			q.put(obj)
 
-		print("{} mainQueue has {} sub-queues, each containing: {} objects!".format(brand.upper(), q.qsize(), round(len(scrapeResult)/ q.qsize())))
+		print("{} mainQueue has {} sub-queues, each containing: {} objects!".format(brand.upper(), q.qsize(), round((len(new)+len(old))/ q.qsize())))
 
 
 		return q
 
-	try:
-		queueObj = makeQueueObjects(numOfQueues)
-		q = divideQueues(scrapeResult, queueObj)
+	
+	queueObj = makeQueueObjects(numOfQueues)
+	new, old = divideNewAndOld(scrapeResult)
+	q = divideQueues(new, old, queueObj)
+	try: 
+		pass
 	except Exception as e:
 		print("MAKING QUEUES AND DIVIDIG THEM ERROR: {}".format(e))
 		errorLog.log("MAKING QUEUES AND DIVIDIG THEM ERROR: {}".format(e))
 
 	while(q.qsize() != 0):
 		try:
-			ThreadingBalancer.queueThread(brand, [q.get(), DBConnector.connect("nike")])
+			ThreadingBalancer.queueThread(brand, [q.get(), DBConnector.connect(brand)])
 		except Exception as e:
 			print("THREAD PLACEMENT ERROR: {}".format(e))
 			errorLog.log("THREAD PLACEMENT ERROR: {}".format(e))

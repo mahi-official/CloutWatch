@@ -1,6 +1,9 @@
 import time
-import errorLog
 import sys
+import os
+sys.path.insert(0, str(os.path.join("/",*list(os.getcwd().split("/"))[:-1], "")))
+import errorLog
+
 
 try:
 	if(sys.argv[1] == "-v"):
@@ -9,7 +12,6 @@ try:
 		verbose = False
 except:
 	verbose = False
-
 
 def check(brand, item, connector):
 
@@ -47,7 +49,7 @@ def check(brand, item, connector):
 
 		try:
 			#gets all the entries with a certain name & matching link
-			cursor.execute("SELECT * FROM data WHERE link = '{}' AND name = '{}'".format(item['link'], item['name']))
+			cursor.execute("SELECT * FROM data WHERE name = '{}'".format(item['name']))
 			rows = cursor.fetchall()
 			#if the query returns something empty:
 			if(len(rows) == 0):
@@ -55,7 +57,7 @@ def check(brand, item, connector):
 				insert(item)
 				notification("new", item)
 				if(verbose == True):
-					print("{} put in {} DB".format(item['name'], brand))
+					print("{} put in {} DB".format(item['name'], brand.upper()))
 			else:
 				#item allready exists in database
 				changeStr = ""
