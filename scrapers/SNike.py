@@ -14,7 +14,7 @@ def frontPageScrape(soup):
 		for div in item.find_all("div", {"class": "grid-item-image-wrapper sprite-sheet sprite-index-0"}):			
 			currentItem['link'] = div.find('a')['href']
 
-		if(" iD" in currentItem['name']):
+		if(" iD" in currentItem['name'] or "-id" in currentItem['link'] or "converse" in currentItem['link']):
 			scrapeResultFailed.append(currentItem)
 		else:
 			scrapeResult.append(currentItem)
@@ -25,7 +25,21 @@ def frontPageScrape(soup):
 
 def itemScrape(currentItemSoup ,currentItem):
 
-	availableSizes, unavailableSizes = [], []
+	availableSizes, unavailableSizes, pics = [], [], []
+	try:
+		for picture in currentItemSoup.find_all("img", {"class": "css-viwop1 u-full-width u-full-height css-147n82m"}):
+			
+			url = str(picture.get("src"))
+			if("LOADING" in url.upper()):
+				pass
+			else:
+				if(url != ""):
+					pics.append(url)
+
+		currentItem['pictures'] = pics
+	except Exception as e:
+		print("pic not found! " + e )
+		currentItem['pictures'] = [""]
 
 	for size in currentItemSoup.find_all("input", {"name": "skuAndSize"}):
 		if('disabled' in str(size)):

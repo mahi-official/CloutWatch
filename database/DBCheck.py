@@ -19,20 +19,22 @@ def check(brand, item, connector):
 
 		
 		def insert(CurrentItem):
-			cursor.execute("""INSERT INTO data (name, price, link, available, unavailable) VALUES ("{}", "{}","{}", "{}", "{}")""".format(CurrentItem['name'],
+			cursor.execute("""INSERT INTO data (name, price, link, available, unavailable, pictures) VALUES ("{}", "{}","{}", "{}", "{}")""".format(CurrentItem['name'],
 																																		  CurrentItem['price'], 
 																																		  CurrentItem['link'], 
 																																		  CurrentItem['available'], 
-																																		  CurrentItem['unavailable']))
+																																		  CurrentItem['unavailable'],
+																																		  CurrentItem['pictures']))
 			connector.commit()
 
 		def notification(Ntype, CurrentItem):
-			cursor.execute("""INSERT INTO notification (type, name, price, link, available, unavailable) VALUES ("{}","{}", "{}","{}", "{}", "{}")""".format(str(Ntype),
+			cursor.execute("""INSERT INTO notification (type, name, price, link, available, unavailable, pictures) VALUES ("{}","{}", "{}","{}", "{}", "{}")""".format(str(Ntype),
 																																										CurrentItem['name'],
 																																										CurrentItem['price'], 
 																																										CurrentItem['link'], 
 																																										CurrentItem['available'], 
-																																										CurrentItem['unavailable']))
+																																										CurrentItem['unavailable'],
+																																		  								CurrentItem['pictures']))
 			connector.commit()
 
 		def update(CurrentItem):
