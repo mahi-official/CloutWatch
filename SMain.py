@@ -159,7 +159,7 @@ def getCurrentItem(brand, queueObj, connector):
 						DBCheck.emptyItem(brand, currentItem, connector)
 					else:	
 						DBCheck.check(brand, currentItem, connector)
-
+					time.sleep(2)
 				driver.close()
 
 			getContent(queueObj, seleniumProxy.getDriver())
