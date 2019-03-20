@@ -5,8 +5,10 @@ import discord_config as dc   #contains the discord bot token
 #import asyncio     #Asynchronous library for executing code when a message is recieved from discord
 import time
 import datetime
+import random
 import json
 import requests
+import ast
 
 import getNotification
 
@@ -15,7 +17,7 @@ def main(client):
 	shoe = {}
 
 	baseURL = "https://discordapp.com/api/channels/{}/messages".format('554609024071499776')
-	s = { 
+	s = {
 		"embed": {
 			"title": "TITLE",
 			"url": "https://www.linkToShoe.com",
@@ -29,7 +31,7 @@ def main(client):
 				"url": "https://www.linkToPicture.com/pic.jpeg"
 			},
 			"image": {
-				"url": ""
+				"url": "https://www.linkToPicture.com/pic.jpeg"
 			},
 			"author": {
 				"name": "Rocket.io",
@@ -56,25 +58,27 @@ def main(client):
 
 		notification = getNotification.get('nike')
 		if(lastnotification != notification):
+			print("Sending notification")
 			shoe = notification[0]
+			s['embed']['timestamp'] = str(datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f"))
+			s['embed']['title'] = shoe['name']
+			s['embed']['url'] = shoe['link']
+			pics = ast.literal_eval(shoe['pictures'])
+			s['embed']['thumbnail']['url'] = pics[random.randint(0,len(pics))]
+			s['embed']['fields'][0]['value'] = shoe['price']
+			s['embed']['fields'][1]['value'] = shoe['available']
 			if(shoe['type'] == "new"):
-				s['embed']['author']['name'] = "Rocket.io 	NEW DROP!"
-				s['embed']['timestamp'] = str(datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f"))
-				s['embed']['title'] = shoe['name']
-				s['embed']['url'] = shoe['link']
-				s['embed']['thumbnail']['url'] = shoe['pictures'][0]
-				s['embed']['fields'][0]['value'] = shoe['price']
-				s['embed']['fields'][1]['value'] = shoe['available']
 
+				s['embed']['author']['name'] = "Rocket.io 	NEW DROP!"
+				
+				pass
 			elif(shoe['type'] == "price"):
-				string = "@everyone PRICE CHANGE! {} is now available for {} at {}".format(shoe['name'], shoe['price'], shoe['link'])
+
+				s['embed']['author']['name'] = "Rocket.io 	PRICE CHANGE!"
 			elif(shoe['type'] == "available"):
-				string = "@everyone NEW SIZES AVAILABLE! {} now has {} sizes available for {} at {}".format(shoe['name'], shoe['available'], shoe['price'], shoe['link'])
-			
+				s['embed']['author']['name'] = "Rocket.io 	NEW SIZES AVAILABLE!"
 
 			POSTedJSON =  json.dumps(s)
-
-			print(s)
 
 			headers = { "Authorization":"Bot {}".format(dc.discord_token),
 									"User-Agent":"CloutWatch (v1.0.0)",
