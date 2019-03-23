@@ -68,6 +68,8 @@ def websiteFilter(website):
 		SMain.Scrape(LoadOrSave(website), "bape")
 	elif(website == "https://store.nike.com/us/en_us/pw/mens-shoes/7puZoi3"):
 		SMain.Scrape(LoadOrSave(website), "nike")
+	elif(website == "https://www.supremenewyork.com/shop"):
+		SMain.Scrape(LoadOrSave(website), "supreme")
 	elif(website == "https://www.adidas.com/us"):
 		SMain.Scrape(LoadOrSave(website), "adidas")
 	elif(website == "https://yeezysupply.com/"):

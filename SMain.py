@@ -17,7 +17,7 @@ import pymysql
 import errorLog
 import seleniumProxy
 
-from scrapers import SNike
+from scrapers import SNike, SSupreme
 numOfQueues = 1
 
 def Scrape(content, brand):
@@ -54,7 +54,11 @@ def Scrape(content, brand):
 
 	def scrapeSoup(soup):
 
-		scrapeResult, scrapeResultFailed = SNike.frontPageScrape(soup)		
+		if(brand == "nike"):
+			scrapeResult, scrapeResultFailed = SNike.frontPageScrape(soup)	
+		elif(brand == "supreme"):
+			scrapeResult, scrapeResultFailed = SSupreme.frontPageScrape(soup)	
+			
 		print("{} found {} items and skipped {} ".format(brand.upper(), len(scrapeResult), len(scrapeResultFailed)))
 		return scrapeResult
 
@@ -159,7 +163,8 @@ def getCurrentItem(brand, queueObj, connector):
 						DBCheck.emptyItem(brand, currentItem, connector)
 					else:	
 						DBCheck.check(brand, currentItem, connector)
-					time.sleep(2)
+					print(currentItem['name'])
+					time.sleep(10)
 				driver.close()
 
 			getContent(queueObj, seleniumProxy.getDriver())
