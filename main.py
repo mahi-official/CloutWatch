@@ -64,26 +64,9 @@ def LoadOrSave(website):
 
 def websiteFilter(website):
 
-	if(website == "https://us.bape.com/"):
-		SMain.Scrape(LoadOrSave(website), "bape")
-	elif(website == "https://store.nike.com/us/en_us/pw/mens-shoes/7puZoi3"):
+	if(website == "https://store.nike.com/us/en_us/pw/mens-shoes/7puZoi3"):
 		SMain.Scrape(LoadOrSave(website), "nike")
-	elif(website == "https://www.supremenewyork.com/shop"):
-		SMain.Scrape(LoadOrSave(website), "supreme")
-	elif(website == "https://www.adidas.com/us"):
-		SMain.Scrape(LoadOrSave(website), "adidas")
-	elif(website == "https://yeezysupply.com/"):
-		SMain.Scrape(LoadOrSave(website), "yeezy")
-	elif(website == "https://kith.com/"):
-		SMain.Scrape(LoadOrSave(website), "kith")
-	elif(website == "https://undefeated.com/"):
-		SMain.Scrape(LoadOrSave(website), "undefeated")
-	elif(website == "https://www.palaceskateboards.com/"):
-		SMain.Scrape(LoadOrSave(website), "palaceskateboards")
-	elif(website == "https://shop.doverstreetmarket.com/us/"):
-		SMain.Scrape(LoadOrSave(website), "doverstreetmarket")
-	elif(website == "https://vlone.co/"):
-		SMain.Scrape(LoadOrSave(website), "vlone")
+
 
 def main():
 	ThreadingBalancer.startThreading()
