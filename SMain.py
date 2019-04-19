@@ -18,7 +18,7 @@ import errorLog
 import seleniumProxy
 
 from scrapers import SNike, SSupreme
-numOfQueues = 1
+numOfQueues = 2
 
 def Scrape(content, brand):
 

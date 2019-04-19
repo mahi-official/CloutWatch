@@ -8,3 +8,4 @@ chromedrivers/macosdriver/chromedriver
 chromedrivers/windowsdriver/chromedriver
 chromedrivers/linuxdriver/chromedriver
 /venv/
+*.pem

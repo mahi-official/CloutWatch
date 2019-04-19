@@ -4,9 +4,9 @@
 
 import pymysql
 
-DB_URL = "cloutwatchdb.c5med6d4kthk.us-east-1.rds.amazonaws.com"
+DB_URL = "##REDACTED##"
 DB_USER = "cloutwatch"
-DB_PASS = "psswd"
+DB_PASS = "##REDACTED##"
 database_name = "nike"
 
 def createNikeTable():
@@ -61,6 +61,9 @@ def createNotification():
 		except Exception as e:
 			print(e)
 
-createNotification()
-createEmptyItem()
-createNikeTable()
+def main():
+	createNotification()
+	createEmptyItem()
+	createNikeTable()
+
+main()
