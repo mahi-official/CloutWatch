@@ -2,10 +2,9 @@ Discontinued project!
 # CloutWatch
 Bot for scraping shoe information, price, size availability and images off of (for now) Nike.com using Python, Selenium (chromeDriver) and BeautifullSoup4.
 
-Here is a (really early) video of how it worked:
-<iframe width="560" height="315" src="https://www.youtube.com/embed/8goaSL_7WgQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 ## How it works
+Here is a (really early) [video]([https://www.youtube.com/watch?v=8goaSL_7WgQ](https://www.youtube.com/watch?v=8goaSL_7WgQ)) of how it worked (note that it doesn't include a lot of features described below!)
+
 It first opens a thread that scrapes the main Nike.com sneaker page to index every shoe available for purchase. It holds those shoes in an array. Then it opens up 2 threads that scrape free US proxies off a website (because Nike's website tends to block connections quite quick if you make a lot of requests in succession). After that's done it checks every item in the scraped array for items already in the SQL database. It will place the items that are not yet in the database at the front of the queue (because some shoes sell out after a couple minutes of being released, so being able to scrape those first is paramount!), then it launches a specified amount of threads that are passed with their own sub queues. The thread opens each url and filters the content for a name, price, sizes and availability.
 If it finds an item that doesn't match its database counterpart it checks for differences and pushes those to the "notification" database (for further use in a discord or cop bot, ect). Rinse and repeat!
 
