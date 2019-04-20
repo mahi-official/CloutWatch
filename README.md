@@ -14,7 +14,7 @@ I was originally tasked to build this system for a freelance client, they were g
 ## What would I do differently if I knew what I know now
 Because I didn't have that much experience with web-scraping, queuing or SQL in Python when I first started this, I went into it quite naively and without much thought about system architecture. I felt the repercussions of that later on as I needed to optimize the flow of data to improve speed and readability.
 
-I also wasn't that familiar with pythons' object oriented way of programming so basically all of the code is written functionally. I have since gotten myself more accustomed with classes (tho I am still learning and not 100% comfortable with it).
+I also wasn't that familiar with pythons' object oriented way of programming so basically all of the code is written functionally. I have since gotten myself more accustomed with classes (though I am still learning and not 100% comfortable with it).
 
 Another thing I regretted not doing is containerising it either using docker or venv (not really containerising but similar in many ways) because when I started deploying my application on Ubuntu EC2 instances I had a lot of trouble with getting it to work as there were tons of small issues I hadn't foreseen, such as having to write a script that selects the right chromedriver depending on the operating system.
 
